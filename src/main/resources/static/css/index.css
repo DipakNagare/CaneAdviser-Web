@@ -1,0 +1,76 @@
+body,h1,h2,p,ul,li,button {
+    margin-top: 0%;
+    padding: 0;
+}
+
+
+header {
+    background: none; 
+    text-align: center;
+    width: 100%;
+    
+}
+
+header img {
+    max-width: 100%;
+    height: auto;
+
+}
+
+
+nav {
+    background: linear-gradient(to right, #245502, #7dce13, #245502);
+    margin-bottom: 5%;  
+    width: 100%; 
+
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+
+    
+}
+
+.indian-map {
+    display: flex;
+    justify-content: space-around; 
+    align-items: stretch;
+    flex: 1;
+}
+
+.map_ind {
+    flex: 1;
+    box-sizing: border-box;
+    max-width: 300px;
+}
+
+.map-container, .chart-container {
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}
+
+#pieChart, #barChart {
+    width: 100%;
+    height: auto;
+    max-width: 400px; 
+    
+
+} 
+ @media (max-width: 768px) {
+    .login-button{
+        flex-direction: column;
+    }
+     .nav, .indian-map {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav, .header, .indian-map, .chart-container {
+        flex: 1;
+        max-width: none;
+        width: 100%;
+    }
+} 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+    <!-- Add your meta tags and stylesheets here -->
+</head>
+<body style="color: #566787; background: #f5f5f5; font-family: 'Varela Round', sans-serif; font-size: 13px;">
+
+<section>
+    <div class="container-xl">
+        <div class="table-responsive custom-table">
+            <div class="table-wrapper"
+                style="background: #fff; padding: 20px 25px; border-radius: 3px; min-width: 100px; box-shadow: 0 1px 1px rgba(0,0,0,.05);">
+                <div class="table-title"
+                    style="padding-bottom: 15px; background: #435d7d; color: #fff; padding: 16px 30px; min-width: 100%; margin: -20px -25px 10px; border-radius: 3px 3px 0 0;">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2 style="margin: 5px 0 0; font-size: 24px;"><b> Manage Technology</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="javascript:void(0);" class="btn btn-success" onclick="showAddTechnologyModal()"
+                                style="color: #fff; float: right; font-size: 13px; border: none; min-width: 50px; border-radius: 2px; border: none; outline: none !important; margin-left: 10px;"><i
+                                    class="material-icons">&#xE147;</i> <span>Add Technology</span></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add an id to the table for easy targeting -->
+                <table class="table table-striped table-hover" id="technology-table">
+                    <thead>
+                        <tr>
+                            <th style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">Sr.No</th>
+                            <th style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">Technology</th>
+                            <th style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-container">
+                        <!-- Table rows will be populated here -->
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text"
+                        style="float: left; margin-top: 10px; font-size: 13px;">Showing <b>5</b> out of <b>25</b>
+                        entries</div>
+                    <ul class="pagination"
+                        style="float: right; margin: 0 0 5px;">
+                        <!-- Pagination buttons will go here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.get("/group-masters", function (data) {
+            // Handle the data here and render it in the container
+            var dataContainer = $("#data-container");
+            dataContainer.html(""); // Clear existing content
+
+            $.each(data, function (index, groupMaster) {
+                var row = `
+                    <tr>
+                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupId}</td>
+                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
+                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
+                            <!-- Add your action buttons here -->
+                        </td>
+                    </tr>`;
+                dataContainer.append(row);
+            });
+        });
+    });
+</script>
+</body>
+</html>

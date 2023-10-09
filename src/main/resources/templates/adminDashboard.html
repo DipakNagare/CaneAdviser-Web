@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>adminDashboard</title>
+    <!-- Add your CSS links here -->
+</head>
+
+<body>
+    <section>
+        <header>
+            <img src="/images/sugarcan1.jpg" alt="Logo">
+        </header>
+        <nav class="navbar-expand-lg">
+            <div class="container">
+                <div class="col-md-12 d-flex justify-content-end" style="height: 50px;">
+                    <a class="btn btn-outline-light px-2" style="margin-right: 10px;" href="login">LOGIN</a>
+                </div>
+            </div>
+        </nav>
+        <div id="wrapper">
+            <div class="overlay">
+                <!-- Sidebar -->
+                <div class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+                    <ul class="nav sidebar-nav ">
+                        <div class="sidebar-header">
+                            <div class="sidebar-brand">
+                                <a href="adminDashboard">Admin</a>
+                            </div>
+                        </div>
+                        <li><a href="manageTechnology" id="manageTechnology" data-url="/manageTechnology">Manage
+                                Technology</a></li>
+                        <li><a href="manageExpert" id="manageExpert" data-url="/manageExpert">Manage Expert</a></li>
+                        <li><a href="viewQueries" id="viewQueries" data-url="/viewQueries">View Queries</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                    <span class="hamb-top"></span>
+                    <span class="hamb-middle"></span>
+                    <span class="hamb-bottom"></span>
+                </button>
+                <div class="container mt-2 justify-content-center">
+                    <div class="row">
+                        <div class="indian-map col-md-12 col-lg-4 mb-4">
+                            <!-- The Indian map will be displayed here -->
+                            <div class="d-flex justify-content-around">
+                                <iframe
+                                    src="https://maps.google.com/maps?q=Hyderabad&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                    frameborder="0" style="border:0; width: 100%; height: 300px;"
+                                    allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-4 mb-4">
+                            <div class="chart-container">
+                                <!-- Pie chart will be displayed here -->
+                                <canvas id="pieChart" width="100" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-4 mb-4">
+                            <div class="chart-container">
+                                <!-- Bar chart will be displayed here -->
+                                <canvas id="barChart" width="100" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="state-info" class="state-info">
+                <!-- State information will be displayed here -->
+                <div class="container">
+                    <div id="manage-technology-content" style="display: none;">
+                        <!-- Your table content here -->
+                    </div>
+                </div>
+                <!-- /#page-content-wrapper -->
+                <!-- /#wrapper -->
+                <!-- Add your JavaScript libraries here -->
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+                    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <!-- Add your custom JavaScript file here -->
+                <script src="/js/index.js"></script>
+                <script src="/js/adminDashboard.js"></script>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
