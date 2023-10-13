@@ -2,26 +2,25 @@ package com.cdac.caneadviser.service;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
+import com.cdac.cane.pojo.QueryViewPojo;
 import com.cdac.caneadviser.dao.Login;
+import com.cdac.caneadviser.dao.QueryViewDao;
 import com.cdac.caneadviser.dao.Registration;
 import com.cdac.caneadviser.dao.VerifyOTP;
 import com.cdac.caneadviser.entity.Analytic;
@@ -29,6 +28,7 @@ import com.cdac.caneadviser.entity.FarmerDetail;
 import com.cdac.caneadviser.entity.GroupMaster;
 import com.cdac.caneadviser.entity.MobileUserHit;
 import com.cdac.caneadviser.entity.Queryhandler;
+import com.cdac.caneadviser.entity.RoleMaster;
 import com.cdac.caneadviser.entity.UserMaster;
 import com.cdac.caneadviser.repository.AnalyticRepo;
 import com.cdac.caneadviser.repository.FarmerDetailRepo;
@@ -36,19 +36,35 @@ import com.cdac.caneadviser.repository.GroupMasterRepo;
 import com.cdac.caneadviser.repository.MobileUserHitRepo;
 import com.cdac.caneadviser.repository.QueryAssignedMasterRepo;
 import com.cdac.caneadviser.repository.QueryhandlerRepo;
-import com.cdac.caneadviser.repository.UserMasterRepo;
+import com.cdac.caneadviser.repository.UserMasterRepo; 
+import com.cdac.caneadviser.dao.Queryhandlerdao;
+
 import org.springframework.data.domain.PageImpl;
 import com.cdac.caneadviser.mail.GenerateSendOTP;
-
+import org.springframework.beans.factory.annotation.Value; 
 
 
 
 import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.tika.Tika;
+
+
+
+
+
+
 
 @Service
+@Configuration
 public class CaneAdviserServiceImpl implements CaneAdviserService {
+	
+	
+	
+	@Value("${spring.mail.username}")
+	private String adminEmailId;
+
 
 	@Autowired
 	private GroupMasterRepo groupMasterRepo;
@@ -103,6 +119,9 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public UserMaster saveUser(UserMaster user) {
+		RoleMaster roleMaster =new RoleMaster();
+		roleMaster.setRoleId(2);  //TODO - static value of expert role
+		user.setRoleMaster(roleMaster);
 		return userMasterRepo.save(user);
 	}
 
@@ -115,53 +134,16 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 	public UserMaster updateUser(UserMaster user) {
 		return userMasterRepo.save(user);
 	}
-
+	
 	@Autowired
-	private QueryhandlerRepo queryhandlerRepo;
-	private List<Queryhandler> queryHandlers;
-
-	    public CaneAdviserServiceImpl(List<Queryhandler> queryHandlers) {
-	        this.queryHandlers = queryHandlers;
-	    }
-
-
-	public Map<Integer, Map<Integer, List<Queryhandler>>> getQueriesYearMonthWise(int year) {
-		Map<Integer, Map<Integer, List<Queryhandler>>> result = new HashMap<>();
-
-		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-			for (Queryhandler handler : queryHandlers) {
-				try {
-					Date askedDate = dateFormat.parse(handler.getAskedDate());
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(askedDate);
-					int handlerYear = calendar.get(Calendar.YEAR);
-					int handlerMonth = calendar.get(Calendar.MONTH) + 1;
-
-					if (handlerYear == year) {
-
-						result.putIfAbsent(handlerYear, new HashMap<>());
-
-						Map<Integer, List<Queryhandler>> yearMap = result.get(handlerYear);
-
-						yearMap.putIfAbsent(handlerMonth, new ArrayList<>());
-
-						yearMap.get(handlerMonth).add(handler);
-					}
-				} catch (ParseException e) {
-
-					e.printStackTrace();
-				}
-			}
-		} catch (IllegalArgumentException e) {
-
-			e.printStackTrace();
-		}
-
-		return result;
+	private QueryhandlerRepo queryhandlerRepo; 
+	@Override
+	public List<Object[]> getMonthlyCountsForCurrentYear() {
+	    List<Object[]> monthlyCounts = queryhandlerRepo.getMonthlyCountsForCurrentYear();
+	    return monthlyCounts;
 	}
 
+    
 	@Override
 	public List<Queryhandler> getAllQueries() {
 		return queryhandlerRepo.findAll();
@@ -285,20 +267,19 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Autowired
 	private AnalyticRepo analyticRepo;
+	
+	 @Autowired
+	    public CaneAdviserServiceImpl(AnalyticRepo analyticRepo) {
+	        this.analyticRepo = analyticRepo;
+	    }
 
+	 public List<Object[]> getTechnologyWiseCount() {
+	        return analyticRepo.getTechnologyWiseCount();
+	    }
 	@Override
 	public List<Analytic> getAllAnalytics() {
 		return analyticRepo.findAll();
 	}
-
-	@Override
-	public Analytic saveAnalytic(Analytic analytic) {
-		return analyticRepo.save(analytic);
-	}
-	@Override
-	public long countByAccContent(String accContent) {
-	        return analyticRepo.countByAccContent(accContent);
-	    }
 	 
 	 
 	@Autowired
@@ -399,65 +380,119 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		}
 	}
 	
-	/*
-	 * @Autowired private QueryAssignedMasterRepo queryAssignedMasterRepo;
-	 * 
-	 * private String adminEmailId = "cdacmlearn@gmail.com";
-	 * 
-	 * @Override public String queryHandler(Queryhandler queryHandler) { try {
-	 * String image1Base64 = processImage(queryHandler.getImage1()); String
-	 * image2Base64 = processImage(queryHandler.getImage2()); String image3Base64 =
-	 * processImage(queryHandler.getImage3());
-	 * 
-	 * // Saving details to Query Handler Database int maxNo =
-	 * queryhandlerRepo.maxNumber() + 1; FarmerDetail farmerDetail =
-	 * farmerDetailRepo.findByFarmId(Integer.parseInt(queryHandler.getFarmId())).get
-	 * (0);
-	 * 
-	 * Queryhandler queryhandlerEntity = new Queryhandler();
-	 * queryhandlerEntity.setQueId(maxNo);
-	 * queryhandlerEntity.setQuery(Jsoup.clean(queryHandler.getQuery(),
-	 * Whitelist.none())); queryhandlerEntity.setFarmerDetail(farmerDetail);
-	 * queryhandlerEntity.setImage1(image1Base64);
-	 * queryhandlerEntity.setImage2(image2Base64);
-	 * queryhandlerEntity.setImage3(image3Base64);
-	 * queryhandlerEntity.setAnsweredBy("NA");
-	 * queryhandlerEntity.setAnsweredDate("NA"); queryhandlerEntity.setAskedDate(new
-	 * Date().toString()); queryhandlerEntity.setQueryAnswer("NA");
-	 * queryhandlerEntity.setQueryDesc("NA");
-	 * 
-	 * queryhandlerRepo.save(queryhandlerEntity);
-	 * 
-	 * // Saving details to Query Assigned Master Database Queryhandler
-	 * queryhandler1 = new Queryhandler(); queryhandler1.setQueId(maxNo);
-	 * 
-	 * QueryAssignedMaster queryAssignedMaster = new QueryAssignedMaster();
-	 * queryAssignedMaster.setQueryhandler(queryhandler1);
-	 * queryAssignedMaster.setAssignedId(maxNo);
-	 * 
-	 * UserMaster userMaster = new UserMaster();
-	 * userMaster.setUserId("5UwLRJfxzHr/c1KCzl9NAg==");
-	 * queryAssignedMaster.setUserMaster(userMaster);
-	 * queryAssignedMaster.setStatus("Unanswered");
-	 * 
-	 * queryAssignedMasterRepo.save(queryAssignedMaster);
-	 * 
-	 * // Sending Mail To Administrator String farmerName =
-	 * farmerDetail.getFarmerName(); generateSendOTP.sendEmailAdmin(adminEmailId,
-	 * maxNo, Jsoup.clean(queryHandler.getQuery(), Whitelist.none()), farmerName);
-	 * 
-	 * return "Success"; } catch (IOException e) { e.printStackTrace(); return
-	 * "Failed"; } }
-	 * 
-	 * private String processImage(MultipartFile multipart) throws IOException { if
-	 * (multipart != null && checkMimeType(multipart)) { byte[] bytes =
-	 * multipart.getBytes(); return new String(Base64.encodeBase64String(bytes)); }
-	 * else { return "NA"; } }
-	 * 
-	 * private boolean checkMimeType(MultipartFile multipart) { Tika tika = new
-	 * Tika(); try { String mediaType = tika.detect(multipart.getBytes()); return
-	 * mediaType.startsWith("image/"); } catch (IOException e) {
-	 * e.printStackTrace(); } return false; }
-	 */
+	
+	@Autowired
+	private QueryAssignedMasterRepo queryAssignedMasterRepo;
+	
+	@Autowired
+	private Queryhandlerdao queryhandlerdao;
+
+	@Override
+	public String queryHandler(Queryhandler queryHandler) {
+	    byte[] bytes;
+	    String image1 = null;
+	    String image2 = null;
+	    String image3 = null;
+	    int maxNo = 0;
+
+	    try {
+	        if (queryHandler.getImage1() != null && checkMimeType(queryHandler.getImage1())) {
+	            bytes = queryHandler.getImage1().getBytes();
+	            image1 = new String(Base64.getEncoder().encode(bytes));
+	        } else {
+	            image1 = "NA";
+	        }
+
+	        if (queryHandler.getImage2() != null && checkMimeType(queryHandler.getImage2())) {
+	            bytes = queryHandler.getImage2().getBytes();
+	            image2 = new String(Base64.getEncoder().encode(bytes));
+	        } else {
+	            image2 = "NA";
+	        }
+
+	        if (queryHandler.getImage3() != null && checkMimeType(queryHandler.getImage3())) {
+	            bytes = queryHandler.getImage3().getBytes();
+	            image3 = new String(Base64.getEncoder().encode(bytes));
+	        } else {
+	            image3 = "NA";
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return "Failed";
+	    }
+
+	    com.cdac.caneadviser.entity.Queryhandler qh = new com.cdac.caneadviser.entity.Queryhandler();
+	    com.cdac.caneadviser.entity.QueryAssignedMaster queryAssignedMaster = new com.cdac.caneadviser.entity.QueryAssignedMaster();
+	    com.cdac.caneadviser.entity.FarmerDetail farmerDetail = new com.cdac.caneadviser.entity.FarmerDetail();
+
+	    maxNo = queryhandlerRepo.maxNumber() + 1;
+
+	    farmerDetail.setFarmId(Integer.parseInt(queryHandler.getFarmId()));
+	    qh.setQuery(Jsoup.clean(queryHandler.getQuery(), Whitelist.none()));
+	    qh.setFarmerDetail(farmerDetail);
+	    qh.setImage1(image1);
+	    qh.setImage2(image2);
+	    qh.setImage3(image3);
+	    qh.setQueId(maxNo);
+	    qh.setAnsweredBy("NA");
+	    qh.setAnsweredDate("NA");
+	    qh.setAskedDate(new Date().toString());
+	    qh.setQueryAnswer("NA");
+	    qh.setQueryDesc("NA");
+	    queryhandlerRepo.save(qh);
+
+	    com.cdac.caneadviser.entity.Queryhandler qh1 = new com.cdac.caneadviser.entity.Queryhandler();
+	    qh1.setQueId(maxNo);
+	    queryAssignedMaster.setQueryhandler(qh1);
+	    queryAssignedMaster.setAssignedId(maxNo);
+
+	    UserMaster um = new UserMaster();
+	    um.setUserId("5UwLRJfxzHr/c1KCzl9NAg==");
+	    queryAssignedMaster.setUserMaster(um);
+	    queryAssignedMaster.setStatus("Unanswered");
+	    queryAssignedMasterRepo.save(queryAssignedMaster);
+
+	    String farmerName = farmerDetailRepo.findByFarmId(Integer.parseInt(queryHandler.getFarmId())).get(0).getFarmerName();
+	    generateSendOTP.sendEmailAdmin(adminEmailId, maxNo, Jsoup.clean(queryHandler.getQuery(), Whitelist.none()), farmerName);
+
+	    return "Success";
+	}
+
+	private boolean checkMimeType(MultipartFile multipart) {
+	    Tika tika = new Tika();
+	    try {
+	        String mediaType = tika.detect(multipart.getBytes());
+	        if (mediaType.equalsIgnoreCase("image/*") || mediaType.equalsIgnoreCase("image/jpg") ||
+	                mediaType.equalsIgnoreCase("image/jpeg") || mediaType.equalsIgnoreCase("image/png")) {
+	            return true;
+	        }
+	    } catch (Exception e) {}
+	    return false;
+	}
+	
+	@Override
+	public List<QueryViewDao> getQueryByFarmId(int farmId) {
+		
+		List<com.cdac.caneadviser.entity.Queryhandler> listQueryHandler = queryhandlerRepo.findAllByFarmerDetailFarmId(farmId);
+		
+		List<QueryViewDao> listQueryViewPojo= new ArrayList<>();
+		QueryViewDao queryViewDao;
+		
+		for(com.cdac.caneadviser.entity.Queryhandler query: listQueryHandler)
+		{
+			queryViewDao = new QueryViewDao();
+			queryViewDao.setAnswer(query.getQueryAnswer());
+			queryViewDao.setAskedDate(query.getAskedDate());
+			queryViewDao.setQuery(query.getQuery());
+			queryViewDao.setImage1(query.getImage1());
+			listQueryViewPojo.add(queryViewDao);
+			
+		}
+		
+		return listQueryViewDao;
+	}
+
+
+	
 }
 

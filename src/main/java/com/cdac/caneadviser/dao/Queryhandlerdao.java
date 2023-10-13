@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Queryhandler {
+public class Queryhandlerdao {
 
     @NotNull(message = "Farm ID is required")
     @Pattern(regexp = "\\d+", message = "Farm ID must contain only numbers")

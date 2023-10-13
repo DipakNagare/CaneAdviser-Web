@@ -3,6 +3,8 @@ package com.cdac.caneadviser.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,11 +31,13 @@ public class QueryAssignedMaster implements Serializable {
 	private String status;
 
 	//bi-directional many-to-one association to UserMaster
+	
 	@ManyToOne
 	@JoinColumn(name="ASSIGNED_TO_ANSWER")
 	private UserMaster userMaster;
 
 	//bi-directional many-to-one association to Queryhandler
+
 	@ManyToOne
 	@JoinColumn(name="QUESTION_ID")
 	private Queryhandler queryhandler;

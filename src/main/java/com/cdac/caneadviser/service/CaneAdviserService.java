@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.cdac.caneadviser.dao.Login;
+import com.cdac.caneadviser.dao.QueryViewDao;
 import com.cdac.caneadviser.dao.Registration;
 import com.cdac.caneadviser.dao.VerifyOTP;
 import com.cdac.caneadviser.entity.Analytic;
@@ -50,6 +51,7 @@ public interface CaneAdviserService {
     List<Queryhandler> getQueriesByFarmerId(int farmId);
     String queryHandler(Queryhandler queryHandler);
     
+    
     //Farmer Details
     List<FarmerDetail> getAllFarmerDetails();
     Optional<FarmerDetail> getFarmerDetailById(int farmId);
@@ -79,9 +81,12 @@ public interface CaneAdviserService {
     
 	Page<Queryhandler> getQueriesPagination(Pageable pageable);
 	 //Map<String, Long> getCountByAccContentType();
-	long countByAccContent(String accContent);
+	void countByAccContent(String accContent);
+	//Map<Integer, Map<Integer, List<Queryhandler>>> getQueriesYearAndMonthWise();
+	List<Object[]> getMonthlyCountsForCurrentYear();
 	
-
+	List<Object[]> getTechnologyWiseCount();
+	List<QueryViewDao> getQueryByFarmId(int farmId);
 	
 	
 	

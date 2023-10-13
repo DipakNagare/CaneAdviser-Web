@@ -61,9 +61,9 @@ public class QueryhandlerController {
         return caneAdviserService.getQueriesPagination(pageable);
     }
     
-    @GetMapping("/queriesYearMonthWise")
-    public Map<Integer, Map<Integer, List<Queryhandler>>> getQueriesYearMonthWise(@RequestParam("year") int year) {
-        return caneAdviserService.getQueriesYearMonthWise(year);
+    @GetMapping("/monthlyCounts")
+    public List<Object[]> getMonthlyCountsForCurrentYear() {
+        return caneAdviserService.getMonthlyCountsForCurrentYear();
     }
 
 

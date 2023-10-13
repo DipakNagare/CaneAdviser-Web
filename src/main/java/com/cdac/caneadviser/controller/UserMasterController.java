@@ -31,9 +31,8 @@ public class UserMasterController {
         return userMaster.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @PostMapping("/")
-    public ResponseEntity<UserMaster> saveUser(@RequestBody UserMaster user) {
+    @PostMapping("/create")
+    public ResponseEntity<UserMaster> createUser(@RequestBody UserMaster user) {
         UserMaster savedUser = caneAdviserService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>manageExpert</title>
+    <title>Manage Expert</title>
 </head>
 <body style="padding: 100px 0; background: #ecf0f4; width: 100%; height: 100%; font-size: 18px; line-height: 1.5; font-family: 'Roboto', sans-serif; color: #222;">
     <section>
@@ -14,74 +13,43 @@
                 <h1 id="title" class="text-center" style="font-weight: 700; font-size: 45px; font-family: 'Roboto', sans-serif;">Manage Expert</h1>
             </header>
             <div class="form-wrap" style="background: rgba(255,255,255,1); width: 100%; max-width: 850px; padding: 50px; margin: 0 auto; margin-top: 20px; position: relative; border-radius: 10px; box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.15);">
-                <form id="survey-form">
+                <form id="user-form">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label id="name-label" for="name" style="display: block; font-size: 18px; color: #000;">User Id</label>
-                                <input type="text" name="User Id" id="User Id" placeholder="Enter your User Id" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                <label for="name" style="display: block; font-size: 18px; color: #000;">Name</label>
+                                <input type="text" name="name" id="name" placeholder="Enter your Full Name" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label id="Contact-label" for="Contact No" style="display: block; font-size: 18px; color: #000;">Contact No</label>
-                                <input type="text" name="Contact No" id="Contact No" placeholder="Contact No" class="form-control" required pattern="[0-9]{10}" style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                <label for="contactNo" style="display: block; font-size: 18px; color: #000;">Contact No</label>
+                                <input type="text" name="contactNo" id="contactNo" placeholder="Contact No" class="form-control" required pattern="[0-9]{10}" style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label id="Addres-label" for="Addres" style="display: block; font-size: 18px; color: #000;">Address</label>
-                                <input type="text" name="Addres" class="form-control" placeholder="Address" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                <label for="userId" style="display: block; font-size: 18px; color: #000;">User Id</label>
+                                <input type="text" name="userId" class="form-control" id="userId" placeholder="User Id" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label style="font-size: 18px; color: #000;">Gender</label>
-                                <select id="dropdown" name="role" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                                    <option disabled selected value>Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
+                                <label for="groupId" style="display: block; font-size: 18px; color: #000;">Group Id</label>
+                                <input type="text" name="groupId" id="groupId" placeholder="Enter your Group Id" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="mt" style="font-size: 18px;">Start date</label>
-                                <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="dob" placeholder="Start Date" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                                    <div class="input-group-addon">
-                                        <span class="glyphicon glyphicon-th"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="mt" style="font-size: 18px;">End date</label>
-                                <div class="input-group date" data-provide="datepicker">
-                                    <input type="text" class="form-control" id="dob" placeholder="End Date" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                                    <div class="input-group-addon">
-                                        <span class="glyphicon glyphicon-th"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label style="font-size: 18px;">Status</label>
-                                <select id="dropdown" name="role" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                <select id="dropdown" name="status" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                                     <option disabled selected value>Select</option>
-                                    <option value="Complete">Complete</option>
-                                    <option value="Incomplete">Incomplete</option>
-                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
                                 </select>
                             </div>
                         </div>
@@ -95,25 +63,37 @@
             </div>
         </div>
     </section>
-    <!-- Add Bootstrap JS and Popper.js scripts here -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Add Bootstrap Datepicker JS script here -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Initialize the datepicker
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy', // You can change the date format as needed
-                autoclose: true,
-            });
+        // Define the form submit event handler
+        $("#user-form").submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-            // Close datepicker when clicking outside
-            $(document).on('click', function (e) {
-                var target = e.target;
-                if (!$(target).is(".datepicker") && !$(target).parents().is(".datepicker")) {
-                    $('.datepicker').datepicker('hide');
+            // Serialize the form data into a JSON object
+            var formData = {
+                userId: $("#userId").val(), // Update this field to set the userId
+                contactNo: $("#contactNo").val(),
+                email: $("#Addres").val(),
+                groupId: $("#groupId").val(), // This is just an example; update this field accordingly
+                status: $("#dropdown").val(),
+            };
+
+            // Send a POST request to your API
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8081/user-masters/create", // Update the endpoint URL
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                success: function (data) {
+                    // Handle the success response here (e.g., show a success message)
+                    alert("User data submitted successfully");
+                },
+                error: function (error) {
+                    // Handle any errors here (e.g., show an error message)
+                    alert("Error submitting user data: " + error);
                 }
             });
         });

@@ -1,4 +1,4 @@
-package dipaknagare.CaneAdviser.controller;
+package com.cdac.caneadviser.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

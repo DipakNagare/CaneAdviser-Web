@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
+
 
 @RestController
 @RequestMapping("/analytics")
@@ -29,10 +30,8 @@ public class AnalyticController {
         Analytic savedAnalytic = caneAdviserService.saveAnalytic(analytic);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAnalytic);
     }
-
-    @GetMapping("/count/{accContent}")
-    public long countByAccContent(@PathVariable String accContent) {
-        return caneAdviserService.countByAccContent(accContent);
+    @GetMapping("/technologyWiseCount")
+    public List<Object[]> getTechnologyWiseCount() {
+        return caneAdviserService.getTechnologyWiseCount();
     }
-
 }

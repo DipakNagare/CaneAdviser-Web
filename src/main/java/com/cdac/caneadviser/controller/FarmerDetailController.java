@@ -60,12 +60,17 @@ public class FarmerDetailController {
         FarmerDetail farmerDetail = caneAdviserService.registerFarmer(registration);
         return ResponseEntity.ok(farmerDetail);
     }
-    
-    @PostMapping(value = "login")
-    @ResponseBody
+    @PostMapping("/login")
     public String farmerLogin(@Valid @RequestBody Login login) {
         return caneAdviserService.checkAuthentication(login).toString();
     }
+
+    
+//    @PostMapping(value = "login")
+//    @ResponseBody
+//    public String farmerLogin(@Valid @RequestBody Login login) {
+//        return caneAdviserService.checkAuthentication(login).toString();
+//    }
     @PostMapping(value = "verifyOTP")
     @ResponseBody
     public FarmerDetail verifyOTP(@Valid @RequestBody VerifyOTP verifyOTP) {

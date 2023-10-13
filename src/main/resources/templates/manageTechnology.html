@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
-<head>
-    <!-- Add your meta tags and stylesheets here -->
-</head>
 <body style="color: #566787; background: #f5f5f5; font-family: 'Varela Round', sans-serif; font-size: 13px;">
 
 <section>
@@ -34,6 +29,7 @@
                     </thead>
                     <tbody id="data-container">
                         <!-- Table rows will be populated here -->
+                        
                     </tbody>
                 </table>
                 <div class="clearfix">
@@ -51,26 +47,29 @@
 </section>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src ="/js/manageTechnology.js"> </script>
 <script>
     $(document).ready(function () {
         $.get("/group-masters", function (data) {
-            // Handle the data here and render it in the container
             var dataContainer = $("#data-container");
             dataContainer.html(""); // Clear existing content
 
+            var idCounter = 1; 
+            
             $.each(data, function (index, groupMaster) {
-                var row = `
-                    <tr>
-                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupId}</td>
-                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
-                        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
-                            <!-- Add your action buttons here -->
-                        </td>
-                    </tr>`;
+            	var row = `
+            	    <tr data-srno="${idCounter}">
+            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${idCounter}</td>
+            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
+            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
+            	            <a href="#editEmployeeModal" class="edit" onclick="showEditTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+            	            <a href="#deleteEmployeeModal" class="delete" onclick="showDeleteTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+            	        </td>
+            	    </tr>`;
                 dataContainer.append(row);
+                idCounter++;
             });
         });
     });
 </script>
 </body>
-</html>

@@ -25,10 +25,16 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.data:spring-data-commons:3.1.4'
-    implementation group: 'org.apache.commons', name: 'commons-codec', version: '1.15' // Apache Commons Codec
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0' // Apache Tika
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3' // Jsoup
+    implementation group: 'org.apache.commons', name: 'commons-codec', version: '1.15'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3' 
+    implementation 'org.springframework:spring-core:6.0.12'
+    
+      
+
+    
     
     
     
