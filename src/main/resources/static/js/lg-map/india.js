@@ -13,7 +13,7 @@ var andaman,andhra,arunachal,assam,bihar,chandigarh,chhatisgarh,daman,delhi,dadr
 if(pageInitialized){
 // alert('hello');
 $.ajax({
-  url : 'GetRegisteredFarmerCount',
+//   url : 'GetRegisteredFarmerCount',
   dataType: 'json',
    success : function(response) {
        

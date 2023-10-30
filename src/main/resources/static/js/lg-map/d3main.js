@@ -7,7 +7,7 @@ var pie,svg;
 if(pageInitialized){
   // alert('hello');
 $.ajax({
-    url : 'GetTechnologyAccesCount',
+    // url : 'GetTechnologyAccesCount',
     dataType: 'json',
      success : function(response) {
          

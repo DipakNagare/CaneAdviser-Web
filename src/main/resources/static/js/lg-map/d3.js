@@ -515,7 +515,7 @@ function axis(orient, scale) {
         .attr(y + "1", 0.5)
         .attr(y + "2", 0.5));
 
-    text = text.merge(tickEnter.append("text")
+    text = text.merge(Enter.append("text")
         .attr("fill", "#000")
         .attr(x, k * spacing)
         .attr(y, 0.5)

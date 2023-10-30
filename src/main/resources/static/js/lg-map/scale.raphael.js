@@ -1,4 +1,4 @@
-2/*
+/*
  * ScaleRaphael 0.8 by Zevan Rosser 2010 
  * For use with Raphael library : www.raphaeljs.com
  * Licensed under the MIT license.
