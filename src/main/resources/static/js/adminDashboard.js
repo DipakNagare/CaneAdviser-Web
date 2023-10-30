@@ -39,6 +39,9 @@ $(document).ready(function () {
         // Hide the map and charts when "Manage Technology" is clicked
         $('.indian-map').hide(); // Hide the map container
         $('.chart-container').hide(); // Hide all elements with class 'chart-container'
+        $('.barChartAdmin').hide();
+        $('.pieChartAdmin').hide();
+
 
         // Load the content based on the URL
         loadContent(url);
@@ -52,7 +55,10 @@ $(document).ready(function () {
         // Hide the map, charts, and "Manage Technology" content when "Manage Expert" is clicked
         $('.indian-map').hide();
         $('.chart-container').hide();
-        $('#manage-technology-content').hide();
+        $('.barChartAdmin').hide();
+        $('.pieChartAdmin').hide();
+
+        // $('#manage-technology-content').hide();
 
         // Load the content based on the URL (manageExpert.html)
         loadContent(url);
@@ -66,7 +72,11 @@ $(document).ready(function () {
         // Hide the map, charts, and "Manage Technology" content when "View Queries" is clicked
         $('.indian-map').hide();
         $('.chart-container').hide();
-        $('#manage-technology-content').hide();
+        $('.barChartAdmin').hide();
+        $('.pieChartAdmin').hide();
+
+
+        // $('#manage-technology-content').hide();
 
         // Load the content based on the URL (viewQueries.html)
         loadContent(url);

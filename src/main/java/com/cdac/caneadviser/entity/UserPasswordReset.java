@@ -1,7 +1,6 @@
 package com.cdac.caneadviser.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

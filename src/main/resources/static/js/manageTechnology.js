@@ -131,17 +131,27 @@ function showDeleteTechnologyModal(groupId) {
         }
     });
 }
+
+var itemsPerPage = 10;
+var totalPages = 1; // Initialize totalPages
+var currentPage = 1; // Global currentPage variable
+
 function updateTable() {
+    
     $.get("/group-masters", function (data) {
         var dataContainer = $("#data-container");
         dataContainer.html(""); // Clear existing content
 
-        var idCounter = 1;
+        totalPages = Math.ceil(data.length / itemsPerPage);
+
+        var startIndex = (currentPage - 1) * itemsPerPage;
+        var endIndex = Math.min(currentPage * itemsPerPage, data.length);
         
-        $.each(data, function (index, groupMaster) {
+        for (var i = startIndex; i < endIndex; i++) {
+            var groupMaster = data[i];
             var row = `
-                <tr data-srno="${idCounter}">
-                    <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${idCounter}</td>
+                <tr data-srno="${i + 1}">
+                    <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${i + 1}</td>
                     <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
                     <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
                         <a href="#editEmployeeModal" class="edit" onclick="showEditTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -149,7 +159,24 @@ function updateTable() {
                     </td>
                 </tr>`;
             dataContainer.append(row);
-            idCounter++;
-        });
+        }
+        console.log(data)
+
+        $("#pagination").find("#totalPages").text(totalPages);
+
+        // Update pagination information
+        totalPages = Math.ceil(data.length / itemsPerPage);
+        $("#pagination").find("#totalPages").text(totalPages);
+
+        var pagination = $("#pagination");
+        pagination.find("li:not(:first-child):not(:last-child)").remove(); // Clear previous pagination links
+
+        for (var i = 1; i <= totalPages; i++) {
+            var pageLink = `<li class="page-item"><a href="javascript:void(0)" class="page-link" style="border: none; font-size: 13px; min-width: 30px; min-height: 30px; color: #999; margin: 0 2px; line-height: 30px; border-radius: 2px !important; text-align: center; padding: 0 6px;">${i}</a></li>`;
+            pagination.find("#nextBtn").before(pageLink);
+        }
+
+        $("#pagination").find("li.page-item").removeClass("active");
+        $("#pagination").find(`li:nth-child(${currentPage + 1})`).addClass("active");
     });
 }

@@ -16,11 +16,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 
-import com.cdac.cane.pojo.QueryViewPojo;
+
 import com.cdac.caneadviser.dao.Login;
 import com.cdac.caneadviser.dao.QueryViewDao;
+import com.cdac.caneadviser.dao.Queryhandlerdao;
 import com.cdac.caneadviser.dao.Registration;
 import com.cdac.caneadviser.dao.VerifyOTP;
 import com.cdac.caneadviser.entity.Analytic;
@@ -37,7 +37,6 @@ import com.cdac.caneadviser.repository.MobileUserHitRepo;
 import com.cdac.caneadviser.repository.QueryAssignedMasterRepo;
 import com.cdac.caneadviser.repository.QueryhandlerRepo;
 import com.cdac.caneadviser.repository.UserMasterRepo; 
-import com.cdac.caneadviser.dao.Queryhandlerdao;
 
 import org.springframework.data.domain.PageImpl;
 import com.cdac.caneadviser.mail.GenerateSendOTP;
@@ -57,7 +56,6 @@ import org.apache.tika.Tika;
 
 
 @Service
-@Configuration
 public class CaneAdviserServiceImpl implements CaneAdviserService {
 	
 	
@@ -384,9 +382,10 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 	@Autowired
 	private QueryAssignedMasterRepo queryAssignedMasterRepo;
 	
+	
 	@Autowired
 	private Queryhandlerdao queryhandlerdao;
-
+	
 	@Override
 	public String queryHandler(Queryhandler queryHandler) {
 	    byte[] bytes;
@@ -396,21 +395,21 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 	    int maxNo = 0;
 
 	    try {
-	        if (queryHandler.getImage1() != null && checkMimeType(queryHandler.getImage1())) {
+	        if (queryHandler.getImage1() != null && checkMimeType(queryhandlerdao.getImage1())) {
 	            bytes = queryHandler.getImage1().getBytes();
 	            image1 = new String(Base64.getEncoder().encode(bytes));
 	        } else {
 	            image1 = "NA";
 	        }
 
-	        if (queryHandler.getImage2() != null && checkMimeType(queryHandler.getImage2())) {
+	        if (queryHandler.getImage2() != null && checkMimeType(queryhandlerdao.getImage2())) {
 	            bytes = queryHandler.getImage2().getBytes();
 	            image2 = new String(Base64.getEncoder().encode(bytes));
 	        } else {
 	            image2 = "NA";
 	        }
 
-	        if (queryHandler.getImage3() != null && checkMimeType(queryHandler.getImage3())) {
+	        if (queryHandler.getImage3() != null && checkMimeType(queryhandlerdao.getImage3())) {
 	            bytes = queryHandler.getImage3().getBytes();
 	            image3 = new String(Base64.getEncoder().encode(bytes));
 	        } else {
@@ -427,8 +426,8 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	    maxNo = queryhandlerRepo.maxNumber() + 1;
 
-	    farmerDetail.setFarmId(Integer.parseInt(queryHandler.getFarmId()));
-	    qh.setQuery(Jsoup.clean(queryHandler.getQuery(), Whitelist.none()));
+	    farmerDetail.setFarmId(Integer.parseInt(queryhandlerdao.getFarmId()));
+	    qh.setQuery(Jsoup.clean(queryhandlerdao.getQuery(), Whitelist.none()));
 	    qh.setFarmerDetail(farmerDetail);
 	    qh.setImage1(image1);
 	    qh.setImage2(image2);
@@ -452,7 +451,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 	    queryAssignedMaster.setStatus("Unanswered");
 	    queryAssignedMasterRepo.save(queryAssignedMaster);
 
-	    String farmerName = farmerDetailRepo.findByFarmId(Integer.parseInt(queryHandler.getFarmId())).get(0).getFarmerName();
+	    String farmerName = farmerDetailRepo.findByFarmId(Integer.parseInt(queryhandlerdao.getFarmId())).get(0).getFarmerName();
 	    generateSendOTP.sendEmailAdmin(adminEmailId, maxNo, Jsoup.clean(queryHandler.getQuery(), Whitelist.none()), farmerName);
 
 	    return "Success";
@@ -475,7 +474,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		
 		List<com.cdac.caneadviser.entity.Queryhandler> listQueryHandler = queryhandlerRepo.findAllByFarmerDetailFarmId(farmId);
 		
-		List<QueryViewDao> listQueryViewPojo= new ArrayList<>();
+		List<QueryViewDao> listQueryViewDao= new ArrayList<>();
 		QueryViewDao queryViewDao;
 		
 		for(com.cdac.caneadviser.entity.Queryhandler query: listQueryHandler)
@@ -485,14 +484,49 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 			queryViewDao.setAskedDate(query.getAskedDate());
 			queryViewDao.setQuery(query.getQuery());
 			queryViewDao.setImage1(query.getImage1());
-			listQueryViewPojo.add(queryViewDao);
+			listQueryViewDao.add(queryViewDao);
 			
 		}
 		
 		return listQueryViewDao;
 	}
 
+	@Override
+	public Map<Integer, Map<Integer, List<Queryhandler>>> getQueriesYearMonthWise(int year) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getQueriesYearMonthWise'");
+	}
+
+	@Override
+	public Analytic saveAnalytic(Analytic analytic) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'saveAnalytic'");
+	}
+
+	@Override
+	public String queryHandler(Queryhandler queryHandler, String adminEmailId) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'queryHandler'");
+	}
+
+	@Override
+	public String MobileUserHit(com.cdac.caneadviser.entity.MobileUserHit mobileHit) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'MobileUserHit'");
+	}
+
+	@Override
+	public long getCountTechnologywise(String technology) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getCountTechnologywise'");
+	}
+
+	@Override
+	public void countByAccContent(String accContent) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'countByAccContent'");
+	}
+
 
 	
 }
-

@@ -2,8 +2,11 @@ package com.cdac.caneadviser.dao;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+@Repository
 public class Queryhandlerdao {
 
     @NotNull(message = "Farm ID is required")

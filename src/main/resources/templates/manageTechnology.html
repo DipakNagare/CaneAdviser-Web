@@ -33,12 +33,12 @@
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text"
-                        style="float: left; margin-top: 10px; font-size: 13px;">Showing <b>5</b> out of <b>25</b>
-                        entries</div>
-                    <ul class="pagination"
-                        style="float: right; margin: 0 0 5px;">
-                        <!-- Pagination buttons will go here -->
+                    <!-- <div class="hint-text" style="float: left; margin-top: 10px; font-size: 13px;">Showing <b>5</b> out of <b>25</b> entries</div> -->
+                    <ul class="pagination" id="pagination" style="float: right; margin: 0 0 5px;">
+                        <li id="prevBtn" class="page-item disabled"><a href="javascript:void(0)" class="page-link" style="border: none; font-size: 13px; min-width: 30px; min-height: 30px; color: #999; margin: 0 2px; line-height: 30px; border-radius: 2px !important; text-align: center; padding: 0 6px;">Previous</a></li>
+                        <li class="page-item active"><a href="javascript:void(0)" class="page-link" style="border: none; font-size: 13px; min-width: 30px; min-height: 30px; color: #fff; background: #03A9F4; margin: 0 2px; line-height: 30px; border-radius: 2px !important; text-align: center; padding: 0 6px;">1</a></li>
+                        <li id="nextBtn" class="page-item"><a href="javascript:void(0)" class="page-link" style="border: none; font-size: 13px; min-width: 30px; min-height: 30px; color: #999; margin: 0 2px; line-height: 30px; border-radius: 2px !important; text-align: center; padding: 0 6px;">Next</a></li>
+                     
                     </ul>
                 </div>
             </div>
@@ -49,27 +49,62 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src ="/js/manageTechnology.js"> </script>
 <script>
-    $(document).ready(function () {
-        $.get("/group-masters", function (data) {
-            var dataContainer = $("#data-container");
-            dataContainer.html(""); // Clear existing content
+ var currentPage = 1;
+    var totalPages = 1; // Define totalPages here
+    var itemsPerPage = 10; // Define itemsPerPage here
 
-            var idCounter = 1; 
-            
-            $.each(data, function (index, groupMaster) {
-            	var row = `
-            	    <tr data-srno="${idCounter}">
-            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${idCounter}</td>
-            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
-            	        <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
-            	            <a href="#editEmployeeModal" class="edit" onclick="showEditTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-            	            <a href="#deleteEmployeeModal" class="delete" onclick="showDeleteTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-            	        </td>
-            	    </tr>`;
-                dataContainer.append(row);
-                idCounter++;
-            });
+    $(document).ready(function () {
+        $("#nextBtn").on("click", function () {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateTable();
+        }
+
+
+    });
+    $("#prevBtn").on("click", function () {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable();
+        }
+    });
+    
+    $.get("/group-masters", function (data) {
+        var dataContainer = $("#data-container");
+        dataContainer.html(""); // Clear existing content
+
+        totalPages = Math.ceil(data.length / itemsPerPage);
+        updateTable();
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        for (var i = (currentPage - 1) * itemsPerPage; i < Math.min(currentPage * itemsPerPage, data.length); i++) {
+            var groupMaster = data[i];
+            if (groupMaster && groupMaster.groupName) {
+            var row = `
+                <tr data-srno="${i + 1}">
+                    <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${i + 1}</td>
+                    <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">${groupMaster.groupName}</td>
+                    <td style="border-color: #e9e9e9; padding: 12px 15px; vertical-align: middle;">
+                        <a href="#editEmployeeModal" class="edit" onclick="showEditTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#deleteEmployeeModal" class "delete" onclick="showDeleteTechnologyModal(${groupMaster.groupId})" data-toggle="modal" style="color: inherit;"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    </td>
+                </tr>`;
+            dataContainer.append(row);
+        }
+    }
         });
     });
+
+    $("#pagination").on("click", "li.page-item", function () {
+        var page = $(this).index() - 1; // Subtract 1 for the previous button
+        if (page >= 0 && page < totalPages) {
+            currentPage = page + 1;
+            updateTable();
+        }
+    });
+
 </script>
 </body>

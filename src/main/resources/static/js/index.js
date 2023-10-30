@@ -27,11 +27,22 @@ const pieChartData = {
 };
 
 const pieCtx = document.getElementById('pieChart').getContext('2d');
-const pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data: pieChartData,
-});
-
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: pieChartData,
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                padding: 20,
+                            },
+                        },
+                    },
+                },
+            });
 // Fetch and render pie chart data
 fetchPieChartDataAndRenderChart();
 
@@ -80,7 +91,6 @@ const barChart = new Chart(barCtx, {
             y: {
                 beginAtZero: true, // Start y-axis from 0
             },
-            
         },
     },
 });
