@@ -1,63 +1,93 @@
    // Function to show SweetAlert modal for Assign action
-   function showAssignModal() {
+ // Function to show SweetAlert modal for Answer action
+function showAnswerModal() {
     Swal.fire({
-        title: 'Assign',
-        input: 'select',
-        inputOptions: {
-            'Expert1': 'Expert1',
-            'Expert2': 'Expert2',
-            'Expert3': 'Expert3'
-        },
-        inputPlaceholder: 'Select an expert',
-        showCancelButton: true,
-        confirmButtonText: 'Assign',
-        cancelButtonText: 'Cancel',
-        showLoaderOnConfirm: true,
-        preConfirm: (expertName) => {
-            // Handle the assignment logic here
-            // You can use AJAX or any other method to assign the query
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    // Simulate a successful assignment
-                    resolve();
-                }, 2000);
-            });
-        },
-        allowOutsideClick: () => !Swal.isLoading()
+      title: 'Question related to Queries',
+      html: `
+      <div id="imageContainer" style="display: flex; gap: 10px;">
+      <img class="thumbnail" src="images/sugarcan1.jpg" alt="Image 1" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+      <i class="fa-solid fa-plus" style="font-size: 20px;"></i>
+      <img class="thumbnail" src="images/sugarcan1.jpg" alt="Image 2" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+      <i class="fa-solid fa-plus" style="font-size: 20px;"></i>
+      <img class "thumbnail" src="images/sugarcan1.jpg" alt="Image 3" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+    </div>
+    <input type="text" id="swal-input1" class="swal2-input" placeholder="Enter your answer"> `,
+      showCancelButton: true,
+      confirmButtonText: 'Submit',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      preConfirm: (answer) => {
+        // Handle the answer submission logic here
+        // You can use AJAX or any other method to save the answer
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            // Simulate a successful answer submission
+            resolve();
+          }, 2000);
+        });
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire('Assigned!', 'The query has been assigned.', 'success');
-        }
+      if (result.isConfirmed) {
+        Swal.fire('Saved!', 'The answer has been saved.', 'success');
+      }
     });
+  }
+  
+  function showFullImage(imageUrl) {
+    Swal.fire({
+      title: 'Full Image',
+      html: `<img src="${imageUrl}" alt="Full Image">`,
+      showCloseButton: true,
+    });
+  }
+y  
+
+ // Function to show SweetAlert modal for Answer action
+function showAnswerModal() {
+  Swal.fire({
+    title: 'Question related to Queries',
+    html: `
+      <div id="imageContainer">
+        <img class="thumbnail" src="images/sugarcan1.jpg" alt="Image 1" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+        <img class="thumbnail" src="images/sugarcan1.jpg" alt="Image 1" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+        <img class="thumbnail" src="images/sugarcan1.jpg" alt="Image 1" width="60" height="60" onclick="showFullImage('images/sugarcan1.jpg')">
+      </div>
+      <input type="text" id="swal-input1" class="swal2-input" placeholder="Enter your answer">
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    showLoaderOnConfirm: true,
+    preConfirm: (answer) => {
+      // Handle the answer submission logic here
+      // You can use AJAX or any other method to save the answer
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // Simulate a successful answer submission
+          resolve();
+        }, 2000);
+      });
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire('Saved!', 'The answer has been saved.', 'success');
+    }
+  });
 }
 
-    // Function to show SweetAlert modal for Answer action
-    function showAnswerModal() {
-        Swal.fire({
-            title: 'Answer',
-            input: 'text',
-            inputPlaceholder: 'Enter the answer',
-            showCancelButton: true,
-            confirmButtonText: 'Save',
-            cancelButtonText: 'Cancel',
-            showLoaderOnConfirm: true,
-            preConfirm: (answer) => {
-                // Handle the answer submission logic here
-                // You can use AJAX or any other method to save the answer
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        // Simulate a successful answer submission
-                        resolve();
-                    }, 2000);
-                });
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Saved!', 'The answer has been saved.', 'success');
-            }
-        });
-    }
+function showFullImage(imageUrl) {
+  Swal.fire({
+    title: 'Full Image',
+    html: `<img src="${imageUrl}" alt="Full Image">`,
+    showCloseButton: true,
+  });
+}
+
+      
+      
+      
     // Function to show SweetAlert modal for Delete action
     function showDeleteModal() {
         Swal.fire({

@@ -48,7 +48,7 @@ public class QueryhandlerController {
     @GetMapping("/farmer/{farmId}")
     public List<Queryhandler> getQueriesByFarmerId(@PathVariable int farmId) {
         return caneAdviserService.getQueriesByFarmerId(farmId);
-    }
+    } 
     
     @GetMapping("/pagingAndSortingQueries/{pageNumber}/{pageSize}")
     public Page<Queryhandler> queriesPagination(
@@ -61,16 +61,9 @@ public class QueryhandlerController {
         return caneAdviserService.getQueriesPagination(pageable);
     }
     
-    @GetMapping("/monthlyCounts")
+    @GetMapping("/queriesYearMonthWise")
     public List<Object[]> getMonthlyCountsForCurrentYear() {
         return caneAdviserService.getMonthlyCountsForCurrentYear();
     }
-
-
-
-
-
-
-    
     
 }

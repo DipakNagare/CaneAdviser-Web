@@ -23,34 +23,41 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="contactNo" style="display: block; font-size: 18px; color: #000;">Contact No</label>
-                                <input type="text" name="contactNo" id="contactNo" placeholder="Contact No" class="form-control" required pattern="[0-9]{10}" style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="userId" style="display: block; font-size: 18px; color: #000;">User Id</label>
+                                <label for="userId" style="display: block; font-size: 18px; color: #000;">Email</label>
                                 <input type="text" name="userId" class="form-control" id="userId" placeholder="User Id" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="groupId" style="display: block; font-size: 18px; color: #000;">Group Id</label>
-                                <input type="text" name="groupId" id="groupId" placeholder="Enter your Group Id" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                            </div>
+                                <label style="font-size: 18px;">Gender</label>
+                                <select id="gender" name="gender" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                    <option disabled selected value>Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                               </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contactNo" style="display: block; font-size: 18px; color: #000;">Contact No</label>
+                                <input type="text" name="contactNo" id="contactNo" placeholder="Contact No" class="form-control" required pattern="[0-9]{10}" style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                                </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label style="font-size: 18px;">Status</label>
+                                <label for="groupId" style="display: block; font-size: 18px; color: #000;">Technology</label>
+                                <input type="text" name="groupMaster" id="groupMaster" placeholder="Enter your Group Id" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+                           
+                                <!-- <label style="font-size: 18px;">Status</label>
                                 <select id="dropdown" name="status" class="form-control" required style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
                                     <option disabled selected value>Select</option>
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
-                                </select>
+                                </select> -->
                             </div>
                         </div>
                     </div>
@@ -74,12 +81,15 @@
 
             // Serialize the form data into a JSON object
             var formData = {
+                name: $("#name").val(),
                 userId: $("#userId").val(), // Update this field to set the userId
                 contactNo: $("#contactNo").val(),
-                email: $("#Addres").val(),
-                groupId: $("#groupId").val(), // This is just an example; update this field accordingly
-                status: $("#dropdown").val(),
+                email: $("#userId").val(),
+                groupMaster: $("#groupMaster").val(), 
+                gender: $("#gender").val(),
             };
+            console.log(formData);
+
 
             // Send a POST request to your API
             $.ajax({
@@ -89,11 +99,23 @@
                 contentType: "application/json",
                 success: function (data) {
                     // Handle the success response here (e.g., show a success message)
-                    alert("User data submitted successfully");
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Manage Expert data submitted successfully',
+                });
+
+                $("#user-form")[0].reset();
+                
                 },
                 error: function (error) {
                     // Handle any errors here (e.g., show an error message)
-                    alert("Error submitting user data: " + error);
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error submitting Manage Expert data : ' + error,
+                });
+
                 }
             });
         });

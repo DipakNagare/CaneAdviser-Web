@@ -51,8 +51,14 @@ function showAddTechnologyModal() {
         preConfirm: (technology) => {
             return new Promise((resolve) => {
                 // Call the addTechnology function to add the technology
+                if (technology.trim() === '') {
+                    Swal.showValidationMessage('Technology Name is required');
+                    resolve();
+                }
+                else{
                 addTechnology(technology);
                 resolve();
+            }
             });
         },
         allowOutsideClick: () => !Swal.isLoading()

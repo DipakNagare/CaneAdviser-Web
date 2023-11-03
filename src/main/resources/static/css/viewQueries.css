@@ -14,7 +14,7 @@
 .button-container {
     display: flex;
     justify-content: space-between;
-    margin-right: 10px;
+    margin-right: 25px;
 }
 
 .logo {
@@ -24,7 +24,7 @@
     background-size: cover;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    margin-right: 10px;
+    margin-right: 120px;
 }
 
 .logo:hover {
@@ -247,7 +247,7 @@ table.table .avatar {
     background-size: cover;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    margin-right: 8px;
+    margin-right: 120px;
 }
 
 .logo:hover {
@@ -325,3 +325,8 @@ table.table .avatar {
         width: 100%;
     }
 }
+.image-item {
+    margin-right: 40px; /* Add spacing to the right of each image */
+    display: inline-block;
+  }
+  

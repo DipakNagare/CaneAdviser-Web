@@ -49,18 +49,22 @@ fetchPieChartDataAndRenderChart();
 
 // Function to fetch data from the backend and update the bar chart
 function fetchMonthlyCountsAndRenderChart() {
-    fetch('http://localhost:8081/queries/monthlyCounts')
+    fetch('http://localhost:8081/queries/queriesYearMonthWise')
         .then((response) => response.json())
         .then((data) => {
             // Extract the months and counts for the bar chart
-            const barMonths = Array.from({ length: 12 }, (_, i) => i + 1); // Natural numbers 1 to 12
-            const barCounts = Array(12).fill(0); // Initialize counts as 0
+            console.log(data);
+            const barMonths = Array.from({ length: 12 }, (_, i) => i + 1); 
+            const barCounts = Array(12).fill(0); 
 
             data.forEach((item) => {
                 const monthNumber = item[0];
                 const count = item[1];
                 barCounts[monthNumber - 1] = count;
             });
+            console.log("barmonth",barMonths); // Log barMonths
+            console.log("barCount",barCounts); // Log barCounts
+        
 
             // Update the bar chart data
             barChart.data.labels = barMonths;
@@ -74,10 +78,10 @@ function fetchMonthlyCountsAndRenderChart() {
 
 // Create bar chart
 const barChartData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [{
         label: 'Monthly Counts',
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Initial data
+        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], // Initial data with integer values
         backgroundColor: '#33AAFF', // Change the color to your preference
     }],
 };
@@ -89,7 +93,12 @@ const barChart = new Chart(barCtx, {
     options: {
         scales: {
             y: {
-                beginAtZero: true, // Start y-axis from 0
+                beginAtZero: true,
+                max: 10, // Set the maximum value as needed
+                stepSize: 1, // Set the step size to 1
+                callback: function (value, index, values) {
+                    return Math.floor(value); // Display integer values
+                },
             },
         },
     },
