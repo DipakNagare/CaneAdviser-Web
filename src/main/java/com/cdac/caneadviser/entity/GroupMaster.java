@@ -117,4 +117,8 @@ public class GroupMaster implements Serializable {
 		return userMaster;
 	}
 
+    public String getFarmerName() {
+        return null;
+    }
+
 }

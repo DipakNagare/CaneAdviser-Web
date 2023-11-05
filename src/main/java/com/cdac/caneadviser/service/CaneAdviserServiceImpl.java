@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.jsoup.Jsoup;
-
+import org.jsoup.safety.Whitelist;
 
 import com.cdac.caneadviser.dao.Login;
 import com.cdac.caneadviser.dao.QueryViewDao;
@@ -36,33 +36,23 @@ import com.cdac.caneadviser.repository.GroupMasterRepo;
 import com.cdac.caneadviser.repository.MobileUserHitRepo;
 import com.cdac.caneadviser.repository.QueryAssignedMasterRepo;
 import com.cdac.caneadviser.repository.QueryhandlerRepo;
-import com.cdac.caneadviser.repository.UserMasterRepo; 
+import com.cdac.caneadviser.repository.UserMasterRepo;
 
 import org.springframework.data.domain.PageImpl;
 import com.cdac.caneadviser.mail.GenerateSendOTP;
-import org.springframework.beans.factory.annotation.Value; 
-
-
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.tika.Tika;
 
-
-
-
-
-
-
 @Service
+@Transactional
 public class CaneAdviserServiceImpl implements CaneAdviserService {
-	
-	
-	
+
 	@Value("${spring.mail.username}")
 	private String adminEmailId;
-
 
 	@Autowired
 	private GroupMasterRepo groupMasterRepo;
@@ -117,8 +107,8 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public UserMaster saveUser(UserMaster user) {
-		RoleMaster roleMaster =new RoleMaster();
-		roleMaster.setRoleId(2);  //TODO - static value of expert role
+		RoleMaster roleMaster = new RoleMaster();
+		roleMaster.setRoleId(2); // TODO - static value of expert role
 		user.setRoleMaster(roleMaster);
 		return userMasterRepo.save(user);
 	}
@@ -132,16 +122,16 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 	public UserMaster updateUser(UserMaster user) {
 		return userMasterRepo.save(user);
 	}
-	
+
 	@Autowired
-	private QueryhandlerRepo queryhandlerRepo; 
+	private QueryhandlerRepo queryhandlerRepo;
+
 	@Override
 	public List<Object[]> getMonthlyCountsForCurrentYear() {
-	    List<Object[]> monthlyCounts = queryhandlerRepo.getMonthlyCountsForCurrentYear();
-	    return monthlyCounts;
+		List<Object[]> monthlyCounts = queryhandlerRepo.getMonthlyCountsForCurrentYear();
+		return monthlyCounts;
 	}
 
-    
 	@Override
 	public List<Queryhandler> getAllQueries() {
 		return queryhandlerRepo.findAll();
@@ -265,21 +255,21 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Autowired
 	private AnalyticRepo analyticRepo;
-	
-	 @Autowired
-	    public CaneAdviserServiceImpl(AnalyticRepo analyticRepo) {
-	        this.analyticRepo = analyticRepo;
-	    }
 
-	 public List<Object[]> getTechnologyWiseCount() {
-	        return analyticRepo.getTechnologyWiseCount();
-	    }
+	@Autowired
+	public CaneAdviserServiceImpl(AnalyticRepo analyticRepo) {
+		this.analyticRepo = analyticRepo;
+	}
+
+	public List<Object[]> getTechnologyWiseCount() {
+		return analyticRepo.getTechnologyWiseCount();
+	}
+
 	@Override
 	public List<Analytic> getAllAnalytics() {
 		return analyticRepo.findAll();
 	}
-	 
-	 
+
 	@Autowired
 	private GenerateSendOTP generateSendOTP;
 
@@ -296,7 +286,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 					return farmerDetail;
 				} else {
 					FarmerDetail farmerDetail = new FarmerDetail();
-					farmerDetail.setStatus("Fail");
+					farmerDetail.setStatus(" SMS Sending Fail");
 					return farmerDetail;
 				}
 			} else {
@@ -311,29 +301,53 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 			return errorDetail;
 		}
 	}
+	// try {
+	// // Your authentication logic here
+
+	// FarmerDetail farmerDetail = new FarmerDetail();
+	// farmerDetail.setStatus("OTP");
+	// farmerDetail.setMobileNo(login.getMobileno());
+
+	// return farmerDetail;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// FarmerDetail errorDetail = new FarmerDetail();
+	// errorDetail.setStatus("Error");
+	// return errorDetail;
+	// }
+	// }
 
 	@Override
-	public FarmerDetail registerFarmer(Registration registration) {
+	public int registerFarmer(Registration registration) {
 		try {
 			List<FarmerDetail> farmerList = farmerDetailRepo.findByMobileNo(registration.getMobileNo());
 
 			if (farmerList.isEmpty()) {
-				FarmerDetail farmerDetail = new FarmerDetail();
 
-				farmerDetailRepo.save(farmerDetail);
+				FarmerDetail farmerDetail = new FarmerDetail();
+				farmerDetail.setFarmerName(registration.getFarmerName());
+				farmerDetail.setCountry(registration.getCountry());
+				farmerDetail.setState(registration.getState());
+				farmerDetail.setDistrict(registration.getDistrict());
+				farmerDetail.setMobileNo(registration.getMobileNo());
+				farmerDetail.setEmailId(registration.getEmailId());
 
 				farmerDetail.setStatus("Success");
-				return farmerDetail;
+				farmerDetailRepo.save(farmerDetail);
+				return 1;
+				
 			} else {
+
 				FarmerDetail farmerDetail = new FarmerDetail();
 				farmerDetail.setStatus("Already_Reg");
-				return farmerDetail;
+				return 2;
 			}
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			FarmerDetail errorDetail = new FarmerDetail();
 			errorDetail.setStatus("Error");
-			return errorDetail;
+			return 0;
 		}
 	}
 
@@ -345,12 +359,13 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public FarmerDetail verifyOTP(VerifyOTP verifyOTP) {
+
 		try {
 			FarmerDetail farmerDetail = farmerDetailRepo.findByMobileNo(verifyOTP.getMobileno()).get(0);
 
 			if (verifyOTP.getOtp().trim().equals(farmerDetail.getOtp())) {
 
-				String farmerID = Integer.toString(farmerDetail.getFarmId());
+				// String farmerID = Integer.toString(farmerDetail.getFarmId());
 
 				farmerDetail.setImeiNo(verifyOTP.getImei());
 
@@ -359,7 +374,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 				farmerDetail.setStatus("Success");
 
-				farmerDetail.setFarmId(Integer.parseInt(farmerID));
+				// farmerDetail.setFarmId(Integer.parseInt(farmerID));
 
 				return farmerDetail;
 			} else {
@@ -377,117 +392,113 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 			return errorDetail;
 		}
 	}
-	
-	
+
 	@Autowired
 	private QueryAssignedMasterRepo queryAssignedMasterRepo;
-	
-	
+
 	@Autowired
 	private Queryhandlerdao queryhandlerdao;
-	
+
 	@Override
-	public String queryHandler(Queryhandler queryHandler) {
-	    byte[] bytes;
-	    String image1 = null;
-	    String image2 = null;
-	    String image3 = null;
-	    int maxNo = 0;
+	public String queryHandler(Queryhandler queryHandler) throws IOException {
+		byte[] bytes;
+		String image1 = null;
+		String image2 = null;
+		String image3 = null;
+		int maxNo = 0;
 
-	    try {
-	        if (queryHandler.getImage1() != null && checkMimeType(queryhandlerdao.getImage1())) {
-	            bytes = queryHandler.getImage1().getBytes();
-	            image1 = new String(Base64.getEncoder().encode(bytes));
-	        } else {
-	            image1 = "NA";
-	        }
+		if (queryHandler.getImage1() != null && checkMimeType(queryhandlerdao.getImage1())) {
+			bytes = queryHandler.getImage1().getBytes();
+			image1 = new String(Base64.getEncoder().encode(bytes));
+		} else {
+			image1 = "NA";
+		}
 
-	        if (queryHandler.getImage2() != null && checkMimeType(queryhandlerdao.getImage2())) {
-	            bytes = queryHandler.getImage2().getBytes();
-	            image2 = new String(Base64.getEncoder().encode(bytes));
-	        } else {
-	            image2 = "NA";
-	        }
+		if (queryHandler.getImage2() != null && checkMimeType(queryhandlerdao.getImage2())) {
+			bytes = queryHandler.getImage2().getBytes();
+			image2 = new String(Base64.getEncoder().encode(bytes));
+		} else {
+			image2 = "NA";
+		}
 
-	        if (queryHandler.getImage3() != null && checkMimeType(queryhandlerdao.getImage3())) {
-	            bytes = queryHandler.getImage3().getBytes();
-	            image3 = new String(Base64.getEncoder().encode(bytes));
-	        } else {
-	            image3 = "NA";
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return "Failed";
-	    }
+		if (queryHandler.getImage3() != null && checkMimeType(queryhandlerdao.getImage3())) {
+			bytes = queryHandler.getImage3().getBytes();
+			image3 = new String(Base64.getEncoder().encode(bytes));
+		} else {
+			image3 = "NA";
+		}
 
-	    com.cdac.caneadviser.entity.Queryhandler qh = new com.cdac.caneadviser.entity.Queryhandler();
-	    com.cdac.caneadviser.entity.QueryAssignedMaster queryAssignedMaster = new com.cdac.caneadviser.entity.QueryAssignedMaster();
-	    com.cdac.caneadviser.entity.FarmerDetail farmerDetail = new com.cdac.caneadviser.entity.FarmerDetail();
+		com.cdac.caneadviser.entity.Queryhandler qh = new com.cdac.caneadviser.entity.Queryhandler();
+		com.cdac.caneadviser.entity.QueryAssignedMaster queryAssignedMaster = new com.cdac.caneadviser.entity.QueryAssignedMaster();
+		com.cdac.caneadviser.entity.FarmerDetail farmerDetail = new com.cdac.caneadviser.entity.FarmerDetail();
 
-	    maxNo = queryhandlerRepo.maxNumber() + 1;
+		maxNo = queryhandlerRepo.maxNumber() + 1;
 
-	    farmerDetail.setFarmId(Integer.parseInt(queryhandlerdao.getFarmId()));
-	    qh.setQuery(Jsoup.clean(queryhandlerdao.getQuery(), Whitelist.none()));
-	    qh.setFarmerDetail(farmerDetail);
-	    qh.setImage1(image1);
-	    qh.setImage2(image2);
-	    qh.setImage3(image3);
-	    qh.setQueId(maxNo);
-	    qh.setAnsweredBy("NA");
-	    qh.setAnsweredDate("NA");
-	    qh.setAskedDate(new Date().toString());
-	    qh.setQueryAnswer("NA");
-	    qh.setQueryDesc("NA");
-	    queryhandlerRepo.save(qh);
+		farmerDetail.setFarmId(Integer.parseInt(queryhandlerdao.getFarmId()));
+		qh.setQuery(Jsoup.clean(queryhandlerdao.getQuery(), Whitelist.none()));
+		qh.setFarmerDetail(farmerDetail);
+		qh.setImage1(image1);
+		qh.setImage2(image2);
+		qh.setImage3(image3);
+		qh.setQueId(maxNo);
+		qh.setAnsweredBy("NA");
+		qh.setAnsweredDate("NA");
+		qh.setAskedDate(new Date().toString());
+		qh.setQueryAnswer("NA");
+		qh.setQueryDesc("NA");
+		queryhandlerRepo.save(qh);
 
-	    com.cdac.caneadviser.entity.Queryhandler qh1 = new com.cdac.caneadviser.entity.Queryhandler();
-	    qh1.setQueId(maxNo);
-	    queryAssignedMaster.setQueryhandler(qh1);
-	    queryAssignedMaster.setAssignedId(maxNo);
+		com.cdac.caneadviser.entity.Queryhandler qh1 = new com.cdac.caneadviser.entity.Queryhandler();
+		qh1.setQueId(maxNo);
+		queryAssignedMaster.setQueryhandler(qh1);
+		queryAssignedMaster.setAssignedId(maxNo);
 
-	    UserMaster um = new UserMaster();
-	    um.setUserId("5UwLRJfxzHr/c1KCzl9NAg==");
-	    queryAssignedMaster.setUserMaster(um);
-	    queryAssignedMaster.setStatus("Unanswered");
-	    queryAssignedMasterRepo.save(queryAssignedMaster);
+		UserMaster um = new UserMaster();
+		um.setUserId("5UwLRJfxzHr/c1KCzl9NAg==");
+		queryAssignedMaster.setUserMaster(um);
+		queryAssignedMaster.setStatus("Unanswered");
+		queryAssignedMasterRepo.save(queryAssignedMaster);
 
-	    String farmerName = farmerDetailRepo.findByFarmId(Integer.parseInt(queryhandlerdao.getFarmId())).get(0).getFarmerName();
-	    generateSendOTP.sendEmailAdmin(adminEmailId, maxNo, Jsoup.clean(queryHandler.getQuery(), Whitelist.none()), farmerName);
+		String farmerName = farmerDetailRepo.findByFarmId(Integer.parseInt(queryhandlerdao.getFarmId())).get(0)
+				.getFarmerName();
+		generateSendOTP.sendEmailAdmin(adminEmailId, maxNo, Jsoup.clean(queryHandler.getQuery(), Whitelist.none()),
+				farmerName);
 
-	    return "Success";
+		return "Success";
 	}
 
 	private boolean checkMimeType(MultipartFile multipart) {
-	    Tika tika = new Tika();
-	    try {
-	        String mediaType = tika.detect(multipart.getBytes());
-	        if (mediaType.equalsIgnoreCase("image/*") || mediaType.equalsIgnoreCase("image/jpg") ||
-	                mediaType.equalsIgnoreCase("image/jpeg") || mediaType.equalsIgnoreCase("image/png")) {
-	            return true;
-	        }
-	    } catch (Exception e) {}
-	    return false;
+		Tika tika = new Tika();
+		try {
+			String mediaType = tika.detect(multipart.getBytes());
+			if (mediaType.equalsIgnoreCase("image/*") || mediaType.equalsIgnoreCase("image/jpg") ||
+					mediaType.equalsIgnoreCase("image/jpeg") || mediaType.equalsIgnoreCase("image/png")) {
+				return true;
+			}
+		} catch (Exception e) {
+		}
+		return false;
 	}
-	
+
 	@Override
 	public List<QueryViewDao> getQueryByFarmId(int farmId) {
-		
-		List<com.cdac.caneadviser.entity.Queryhandler> listQueryHandler = queryhandlerRepo.findAllByFarmerDetailFarmId(farmId);
-		
-		List<QueryViewDao> listQueryViewDao= new ArrayList<>();
+
+		List<com.cdac.caneadviser.entity.Queryhandler> listQueryHandler = queryhandlerRepo
+				.findAllByFarmerDetailFarmId(farmId);
+
+		List<QueryViewDao> listQueryViewDao = new ArrayList<>();
 		QueryViewDao queryViewDao;
-		
-		for(com.cdac.caneadviser.entity.Queryhandler query: listQueryHandler)
-		{
+
+		for (com.cdac.caneadviser.entity.Queryhandler query : listQueryHandler) {
 			queryViewDao = new QueryViewDao();
 			queryViewDao.setAnswer(query.getQueryAnswer());
 			queryViewDao.setAskedDate(query.getAskedDate());
 			queryViewDao.setQuery(query.getQuery());
 			queryViewDao.setImage1(query.getImage1());
 			listQueryViewDao.add(queryViewDao);
-			
+
 		}
-		
+
 		return listQueryViewDao;
 	}
 
@@ -527,6 +538,4 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		throw new UnsupportedOperationException("Unimplemented method 'countByAccContent'");
 	}
 
-
-	
 }

@@ -2,6 +2,7 @@ package com.cdac.caneadviser.entity;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
@@ -20,46 +21,56 @@ public class MobileUserHit implements Serializable {
 
 	@Id
 	private int sno;
-
 	private String farmId;
 
 	private String openedDate;
 
 	private String openedTime;
 
-	public MobileUserHit() {
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
+
 	public int getSno() {
-		return this.sno;
+		return sno;
 	}
+
 
 	public void setSno(int sno) {
 		this.sno = sno;
 	}
 
+
 	public String getFarmId() {
-		return this.farmId;
+		return farmId;
 	}
+
 
 	public void setFarmId(String farmId) {
 		this.farmId = farmId;
 	}
 
+
 	public String getOpenedDate() {
-		return this.openedDate;
+		return openedDate;
 	}
+
 
 	public void setOpenedDate(String openedDate) {
 		this.openedDate = openedDate;
 	}
 
+
 	public String getOpenedTime() {
-		return this.openedTime;
+		return openedTime;
 	}
+
 
 	public void setOpenedTime(String openedTime) {
 		this.openedTime = openedTime;
 	}
+
 
 }

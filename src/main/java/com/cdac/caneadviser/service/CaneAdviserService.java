@@ -1,5 +1,6 @@
 package com.cdac.caneadviser.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import java.util.Map;
@@ -49,7 +50,7 @@ public interface CaneAdviserService {
     List<Queryhandler> getAnsweredAssignedQueries(int userId);
     List<Queryhandler> getUnansweredAssignedQueries(int userId);
     List<Queryhandler> getQueriesByFarmerId(int farmId);
-    String queryHandler(Queryhandler queryHandler);
+    String queryHandler(Queryhandler queryHandler) throws IOException;
     
     
     //Farmer Details
@@ -75,7 +76,7 @@ public interface CaneAdviserService {
 	
 	FarmerDetail verifyOTP(VerifyOTP verifyOTP);
 	FarmerDetail checkAuthentication(Login login);
-    FarmerDetail registerFarmer(Registration registration);
+    int registerFarmer(Registration registration);
     Boolean mobileAvailability(String mobileno);
     
     

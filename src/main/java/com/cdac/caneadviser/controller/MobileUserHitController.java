@@ -19,7 +19,7 @@ public class MobileUserHitController {
 
    
 
-    @GetMapping
+    @GetMapping("/hits")
     public List<MobileUserHit> getAllMobileUserHits() {
         return caneAdviserService.getAllMobileUserHits();
     }

@@ -12,6 +12,10 @@ public class Registration {
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
     private String farmerName;
 
+	@NotNull(message = "Country name is required")
+	@Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
+	private String country;
+
     @NotNull(message = "State is required")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
     private String state;
@@ -86,6 +90,14 @@ public class Registration {
 
 	public void setFarmerName(String farmerName) {
 		this.farmerName = farmerName;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getState() {
@@ -223,4 +235,7 @@ public class Registration {
 	public void setImeiNo(String imeiNo) {
 		this.imeiNo = imeiNo;
 	}
+
+
+	    
 }

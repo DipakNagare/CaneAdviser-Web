@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.cdac.caneadviser.entity.Queryhandler;
 import com.cdac.caneadviser.service.CaneAdviserService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,11 @@ public class QueryhandlerController {
 
     @Autowired
     private CaneAdviserService caneAdviserService;
+
+    @PostMapping("/queryHandler")
+    public String queryHandler(@RequestBody Queryhandler queryHandler) throws IOException {
+        return caneAdviserService.queryHandler(queryHandler);
+    }
 
     @GetMapping("/all")
     public List<Queryhandler> getAllQueries() {
@@ -48,22 +54,21 @@ public class QueryhandlerController {
     @GetMapping("/farmer/{farmId}")
     public List<Queryhandler> getQueriesByFarmerId(@PathVariable int farmId) {
         return caneAdviserService.getQueriesByFarmerId(farmId);
-    } 
-    
+    }
+
     @GetMapping("/pagingAndSortingQueries/{pageNumber}/{pageSize}")
     public Page<Queryhandler> queriesPagination(
             @PathVariable Integer pageNumber,
             @PathVariable Integer pageSize) {
         Sort sort = Sort.by(
-            Sort.Order.desc("askedDate") 
-        );
+                Sort.Order.desc("askedDate"));
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         return caneAdviserService.getQueriesPagination(pageable);
     }
-    
+
     @GetMapping("/queriesYearMonthWise")
     public List<Object[]> getMonthlyCountsForCurrentYear() {
         return caneAdviserService.getMonthlyCountsForCurrentYear();
     }
-    
+
 }
