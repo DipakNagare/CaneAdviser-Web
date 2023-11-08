@@ -19,6 +19,9 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 
 /**
  * The persistent class for the user_master database table.
@@ -31,6 +34,7 @@ public class UserMaster implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="USER_ID")
 	private String userId;
 

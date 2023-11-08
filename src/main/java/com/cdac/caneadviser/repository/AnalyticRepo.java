@@ -12,11 +12,11 @@ import com.cdac.caneadviser.entity.Analytic;
 @Repository
 public interface AnalyticRepo extends JpaRepository<Analytic, Integer> {
 	
+	//List<Analytic> findAll();
+
 	 @Query(value = "SELECT accContent, COUNT(*) AS count FROM analytics GROUP BY accContent", nativeQuery = true)
 	    List<Object[]> getTechnologyWiseCount();
-
-	
-	
+		
 
 	
 }

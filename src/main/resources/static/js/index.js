@@ -1,3 +1,9 @@
+// india map
+
+
+
+
+
 // Function to fetch data from the backend and update the pie chart
 function fetchPieChartDataAndRenderChart() {
     fetch('http://localhost:8081/analytics/technologyWiseCount')

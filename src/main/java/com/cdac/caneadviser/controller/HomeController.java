@@ -12,10 +12,10 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/login")
-    public String login()
+    @GetMapping("/Adminlogin")
+    public String Adminlogin()
     {
-        return "login";
+        return "Adminlogin";
     }
 
     @GetMapping("/adminDashboard")

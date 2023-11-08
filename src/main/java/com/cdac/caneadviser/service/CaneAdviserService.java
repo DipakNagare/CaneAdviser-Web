@@ -63,7 +63,7 @@ public interface CaneAdviserService {
     //MobileUserHit
     List<MobileUserHit> getAllMobileUserHits();
     MobileUserHit saveMobileUserHit(MobileUserHit mobileUserHit);
-    long getOverallCount();
+    long getOverallCount(); 
     
     //Analytic
     List<Analytic> getAllAnalytics();
@@ -78,6 +78,7 @@ public interface CaneAdviserService {
 	FarmerDetail checkAuthentication(Login login);
     int registerFarmer(Registration registration);
     Boolean mobileAvailability(String mobileno);
+    List<Object[]> getStateWiseRegistrationCounts();
     
     
 	Page<Queryhandler> getQueriesPagination(Pageable pageable);

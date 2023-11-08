@@ -29,6 +29,11 @@ public class FarmerDetailController {
         return caneAdviserService.getAllFarmerDetails();
     }
 
+    @GetMapping("/state-wise-counts")
+    public List<Object[]> getStateWiseCounts() {
+        return caneAdviserService.getStateWiseRegistrationCounts();
+    }
+
     @GetMapping("/{farmId}")
     public ResponseEntity<FarmerDetail> getFarmerDetailById(@PathVariable int farmId) {
         Optional<FarmerDetail> farmerDetail = caneAdviserService.getFarmerDetailById(farmId);
@@ -56,9 +61,19 @@ public class FarmerDetailController {
 
     @PostMapping("/register")
     public RequestStatus registerFarmer(@RequestBody Registration registration) {
+        System.out.println("+++++++++  " + registration.getMobileNo());
+        System.out.println("+++++++++ " + registration.getFarmerName());
+
+        System.out.println("+++++++++ " + registration.getState());
+
+        System.out.println("+++++++++ " + registration.getDistrict());
+
+        System.out.println("+++++++++ " + registration.getEmailId());
+
+        System.out.println("+++++++++ " + registration.getCountry());
 
         int id = caneAdviserService.registerFarmer(registration);
-        
+
         RequestStatus status = new RequestStatus();
         status.setId(id);
         if (id == 1) {

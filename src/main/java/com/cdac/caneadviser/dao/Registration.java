@@ -9,30 +9,30 @@ import javax.validation.constraints.Pattern;
 public class Registration {
 
     @NotNull(message = "Farmer Name is required")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
+    // @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
     private String farmerName;
 
 	@NotNull(message = "Country name is required")
-	@Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
+	// @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
 	private String country;
 
     @NotNull(message = "State is required")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
+    // @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
     private String state;
 
     @NotNull(message = "District is required")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Invalid Format. Only Alphabets and Numbers are allowed")
+    // @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Invalid Format. Only Alphabets and Numbers are allowed")
     private String district;
 
     @NotNull(message = "Mobile Number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid Format. 10 digits are required")
+    // @Pattern(regexp = "^[0-9]{10}$", message = "Invalid Format. 10 digits are required")
     private String mobileNo;
 
     @Email(message = "Invalid Email Format")
     private String emailId;
 
     @NotNull(message = "Occupation is required")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
+    // @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
     private String occupation;
 
     @NotNull(message = "Age is required")

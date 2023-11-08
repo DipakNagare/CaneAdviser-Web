@@ -7,5 +7,4 @@ import com.cdac.caneadviser.entity.UserMaster;
 
 @Repository
 public interface UserMasterRepo extends JpaRepository<UserMaster, String> {
-    
 }

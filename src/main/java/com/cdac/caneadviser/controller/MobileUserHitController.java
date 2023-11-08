@@ -21,6 +21,7 @@ public class MobileUserHitController {
 
     @GetMapping("/hits")
     public List<MobileUserHit> getAllMobileUserHits() {
+        // System.out.println("------======------- Api called");
         return caneAdviserService.getAllMobileUserHits();
     }
 

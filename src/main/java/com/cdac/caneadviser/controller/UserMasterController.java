@@ -44,8 +44,8 @@ public class UserMasterController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<UserMaster> updateUser(@RequestBody UserMaster user) {
-        UserMaster updatedUser = caneAdviserService.updateUser(user);
-        return ResponseEntity.ok(updatedUser);
+    public String updateUser(@RequestBody UserMaster user) {
+         caneAdviserService.updateUser(user);
+        return "Data Updated Successfully";
     }
 }

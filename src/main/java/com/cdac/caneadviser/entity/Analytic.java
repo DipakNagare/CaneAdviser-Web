@@ -1,6 +1,10 @@
 package com.cdac.caneadviser.entity;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -8,41 +12,57 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
-
 /**
  * The persistent class for the analytics database table.
  * 
  */
 @Entity
-@Table(name="analytics")
-@NamedQuery(name="Analytic.findAll", query="SELECT a FROM Analytic a")
+@Table(name = "analytics")
+@NamedQuery(name = "Analytic.findAll", query = "SELECT a FROM Analytic a")
 public class Analytic implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "sno")
 	private int sno;
-
+	// private int farmId;
+	@Column(name = "accContent")
 	private String accContent;
 
+	@Column(name = "accDate")
 	private String accDate;
 
-	private String accSubtop;
+	@Column(name = "accSubtop")
+	private String accSubtop;	
+	
+	@Column(name = "acctime")
+	private String acctime;
 
-	private String accTIme;
-
+	@Column(name = "deviceModel")
 	private String deviceModel;
 
+	@Column(name = "networkType")
 	private String networkType;
-
+	
+	@Column(name = "timeSpent")
 	private String timeSpent;
 
-	//bi-directional many-to-one association to FarmerDetail
+	// bi-directional many-to-one association to FarmerDetail
 	@ManyToOne
-	@JoinColumn(name="farmId")
+	@JoinColumn(name = "farmId")
+	@JsonIgnore
 	private FarmerDetail farmerDetail;
 
 	public Analytic() {
 	}
+
+	// public int getFarmId() {
+	// 	return this.farmId;
+	// }
+
+	// public void setFarmId(int farmId) {
+	// 	this.farmId = farmId;
+	// }
 
 	public int getSno() {
 		return this.sno;
@@ -76,12 +96,12 @@ public class Analytic implements Serializable {
 		this.accSubtop = accSubtop;
 	}
 
-	public String getAccTIme() {
-		return this.accTIme;
+	public String getAccTime() {
+		return this.acctime;
 	}
 
-	public void setAccTIme(String accTIme) {
-		this.accTIme = accTIme;
+	public void setAccTime(String acctime) {
+		this.acctime = acctime;
 	}
 
 	public String getDeviceModel() {

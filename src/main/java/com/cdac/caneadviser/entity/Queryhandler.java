@@ -25,7 +25,7 @@ import java.util.List;
 @NamedQuery(name="Queryhandler.findAll", query="SELECT q FROM Queryhandler q")
 public class Queryhandler implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+ 
 	@Id
 	@Column(name="QUE_ID")
 	private int queId;

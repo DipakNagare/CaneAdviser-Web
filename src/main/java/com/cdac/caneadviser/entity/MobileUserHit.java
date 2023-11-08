@@ -20,11 +20,16 @@ public class MobileUserHit implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "sno")
 	private int sno;
-	private String farmId;
 
+	@Column(name = "farmId")
+	private String farmId;
+    
+	@Column(name = "openedDate")
 	private String openedDate;
 
+	@Column(name = "openedTime")
 	private String openedTime;
 
 

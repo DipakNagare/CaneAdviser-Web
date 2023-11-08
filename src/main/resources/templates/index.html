@@ -18,7 +18,7 @@
         <nav class="navbar-expand-lg">
             <div class="container">
                 <div class="col-md-12 d-flex justify-content-end" style="height: 50px;">
-                    <a class="btn btn-outline-light px-2" style="margin-right: 10px;" href="login">LOGIN</a>
+                    <a class="btn btn-outline-light px-2" style="margin-right: 10px;" href="Adminlogin">LOGIN</a>
                 </div>
             </div>
         </nav>
@@ -80,7 +80,7 @@
 
         <script type="text/javascript">
             var w = 350;
-            var h = 350  ;
+            var h = 350;
             var proj = d3.geo.mercator();
             var path = d3.geo.path().projection(proj);
             var t = proj.translate(); // the projection's default translation
@@ -111,7 +111,7 @@
                     .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxTotal }))
                     .range(colors);
 
-// ubhi dandi map chi
+                // ubhi dandi map chi
                 // var y = d3.scale.sqrt()
                 //     .domain([0, 10000])
                 //     .range([0, 300]);

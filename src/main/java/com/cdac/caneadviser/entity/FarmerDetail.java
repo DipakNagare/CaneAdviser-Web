@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the farmer_details database table.
@@ -70,8 +72,10 @@ public class FarmerDetail implements Serializable {
 
 	private String yield;
 
+
 	//bi-directional many-to-one association to Analytic
 	@OneToMany(mappedBy="farmerDetail")
+	@JsonIgnore
 	private List<Analytic> analytics;
 
 	//bi-directional many-to-one association to Queryhandler

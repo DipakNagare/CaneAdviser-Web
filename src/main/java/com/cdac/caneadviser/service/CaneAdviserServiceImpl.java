@@ -38,6 +38,8 @@ import com.cdac.caneadviser.repository.QueryAssignedMasterRepo;
 import com.cdac.caneadviser.repository.QueryhandlerRepo;
 import com.cdac.caneadviser.repository.UserMasterRepo;
 
+import jakarta.persistence.EntityManager;
+
 import org.springframework.data.domain.PageImpl;
 import com.cdac.caneadviser.mail.GenerateSendOTP;
 import org.springframework.beans.factory.annotation.Value;
@@ -139,12 +141,13 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public List<Queryhandler> getAnsweredQueries() {
-		return queryhandlerRepo.findByQueryAnswerIsNotNull();
+		// return queryhandlerRepo.findByQueryAnswerIsNotNull();
+		return queryhandlerRepo.findAnsweredQuery();
 	}
 
 	@Override
 	public List<Queryhandler> getUnansweredQueries() {
-		return queryhandlerRepo.findByQueryAnswerIsNull();
+		return queryhandlerRepo.findNotAnsweredQuery();
 	}
 
 	@Override
@@ -159,7 +162,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public List<Queryhandler> getQueriesByFarmerId(int farmId) {
-		return queryhandlerRepo.findByFarmerDetailFarmId(farmId);
+		return queryhandlerRepo.findQueriesByFarmId(farmId);
 	}
 
 	@Override
@@ -240,7 +243,8 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public List<MobileUserHit> getAllMobileUserHits() {
-		return mobileUserHitRepo.findAll();
+		List<MobileUserHit> mobileHit = mobileUserHitRepo.findAll();
+		return mobileHit;
 	}
 
 	@Override
@@ -319,9 +323,10 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public int registerFarmer(Registration registration) {
+		System.out.println("\n\n\n\n\n\n\n\n======= MobileNo " + registration.getMobileNo() + "\n\n\n\n\n\n\n");
 		try {
 			List<FarmerDetail> farmerList = farmerDetailRepo.findByMobileNo(registration.getMobileNo());
-
+			System.out.println("lenght ====" + farmerList.size());
 			if (farmerList.isEmpty()) {
 
 				FarmerDetail farmerDetail = new FarmerDetail();
@@ -335,7 +340,7 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 				farmerDetail.setStatus("Success");
 				farmerDetailRepo.save(farmerDetail);
 				return 1;
-				
+
 			} else {
 
 				FarmerDetail farmerDetail = new FarmerDetail();
@@ -391,6 +396,14 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 			errorDetail.setFarmId(0);
 			return errorDetail;
 		}
+	}
+
+	@Autowired
+	private EntityManager entityManager;
+
+	@Override
+	public List<Object[]> getStateWiseRegistrationCounts() {
+		return farmerDetailRepo.getStateWiseRegistrationCounts();
 	}
 
 	@Autowired
@@ -510,8 +523,12 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 	@Override
 	public Analytic saveAnalytic(Analytic analytic) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'saveAnalytic'");
+		System.out.println("++++++++ 1");
+		analyticRepo.save(analytic);
+		System.out.println("++++++++ 2");
+
+		Analytic D = new Analytic();
+		return D;
 	}
 
 	@Override
