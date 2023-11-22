@@ -1,7 +1,8 @@
 package com.cdac.caneadviser.service;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import com.cdac.caneadviser.entity.User;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Override
@@ -10,7 +11,8 @@ public class UserServiceImpl implements UserService {
         String testEmail = "dipakN@gmail.com";
         String testPassword = "Dipak@123";
 
-        if (email.equals(testEmail) && password.equals(testPassword)) {
+        // Check if email is not null before using equals
+        if (email != null && email.equals(testEmail) && password.equals(testPassword)) {
             // Successful login
             return new User();
         }

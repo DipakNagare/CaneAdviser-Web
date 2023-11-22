@@ -19,7 +19,8 @@ header img {
 
 
 nav {
-    background: linear-gradient(to right, #245502, #7dce13, #245502);
+    /* background: linear-gradient(to right, #245502, #7dce13, #245502); */
+    background-color:  #5e9106;
     margin-bottom: 5%;  
     width: 100%; 
 

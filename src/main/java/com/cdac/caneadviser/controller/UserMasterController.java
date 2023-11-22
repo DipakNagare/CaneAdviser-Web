@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.cdac.caneadviser.entity.RoleMaster;
 import com.cdac.caneadviser.entity.UserMaster;
 import com.cdac.caneadviser.service.CaneAdviserService;
 
@@ -38,14 +39,28 @@ public class UserMasterController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+    public String deleteUser(@PathVariable String userId) {
     	caneAdviserService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
+        return "Data Delete Successfully";
     }
 
-    @PutMapping("/")
-    public String updateUser(@RequestBody UserMaster user) {
-         caneAdviserService.updateUser(user);
-        return "Data Updated Successfully";
+    @PutMapping("/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable String userId, @RequestBody UserMaster updatedUser) {
+        try {
+            // Set the user ID in the updated data
+            updatedUser.setUserId(userId);
+
+            // Directly set the roleId in the updated data
+            RoleMaster roleMaster = new RoleMaster();
+            roleMaster.setRoleId(2); // TODO - static value of expert role
+            updatedUser.setRoleMaster(roleMaster);
+
+            // Update the user
+            caneAdviserService.updateUser(updatedUser);
+
+            return new ResponseEntity<>("Data Updated Successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error Updating Data: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

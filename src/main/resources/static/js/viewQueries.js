@@ -1,4 +1,35 @@
-   // Function to show SweetAlert modal for Assign action
+ // Function to show SweetAlert modal for Assign action
+ function showAssignModal() {
+  Swal.fire({
+      title: 'Assign',
+      input: 'select',
+      inputOptions: {
+          'Expert1': 'Expert1',
+          'Expert2': 'Expert2',
+          'Expert3': 'Expert3'
+      },
+      inputPlaceholder: 'Select an expert',
+      showCancelButton: true,
+      confirmButtonText: 'Assign',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      preConfirm: (expertName) => {
+          // Handle the assignment logic here
+          // You can use AJAX or any other method to assign the query
+          return new Promise((resolve) => {
+              setTimeout(() => {
+                  // Simulate a successful assignment
+                  resolve();
+              }, 2000);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+      if (result.isConfirmed) {
+          Swal.fire('Assigned!', 'The query has been assigned.', 'success');
+      }
+  });
+}
  // Function to show SweetAlert modal for Answer action
 function showAnswerModal() {
     Swal.fire({

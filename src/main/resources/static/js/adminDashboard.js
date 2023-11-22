@@ -48,7 +48,7 @@ $(document).ready(function () {
     });
 
     // Handle the click event for "Manage Expert" link
-    $(document).on('click', '#manageExpert', function (e) {
+    $(document).on('click', '#viewExpert', function (e) {
         e.preventDefault(); // Prevent the default link behavior
         var url = $(this).data('url'); // Get the URL for manageExpert.html
 

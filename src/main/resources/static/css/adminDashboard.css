@@ -35,7 +35,7 @@ html { height: 100%;}
     margin-left: -220px;
     overflow-y: auto;
     overflow-x: hidden;
-    background: linear-gradient(to right, #245502, #7dce13, #245502);
+    background: #5e9106;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -93,7 +93,7 @@ html { height: 100%;}
     z-index: -1;
     height: 100%;
     width: 3px;
-    background-color: linear-gradient(to right, #819870, #7dce13, #245502);
+    background-color: #5e9106;
     -webkit-transition: width .2s ease-in;
       -moz-transition:  width .2s ease-in;
        -ms-transition:  width .2s ease-in;
@@ -101,7 +101,7 @@ html { height: 100%;}
 
 }
 .sidebar-nav li:hover{
-  background:linear-gradient(to right, #245502, #7dce13, #245502) !important;
+  background:#5e9106 !important;
   border-radius: 10px;
   margin-left: 10px;
   margin-right: 10px;
@@ -143,8 +143,8 @@ html { height: 100%;}
 .sidebar-brand {
     height: 65px;
     position: relative;
-    background:linear-gradient(to right, #245502, #7dce13, #245502);
-    background: linear-gradient(to right bottom, #245502 50%, #245502 50%);
+    background:#5e9106;
+    /* background: linear-gradient(to right bottom, #245502 50%, #245502 50%); */
    padding-top: 1em;
 }
 .sidebar-brand a {
@@ -158,8 +158,8 @@ html { height: 100%;}
     text-align: center;
     font-size: 1em;
     color: #ddd;
-    background:linear-gradient(to right, #245502, #7dce13, #245502);
-    background: linear-gradient(to right bottom, #245502 50%, #245502 50%);
+    background:#5e9106;
+    /* background: linear-gradient(to right bottom, #245502 50%, #245502 50%); */
 }
 .sidebar-nav .dropdown-menu {
     position: relative;
@@ -168,7 +168,7 @@ html { height: 100%;}
     margin: 0;
     border-radius: 0;
     border: none;
-    background-color: #245502;
+    background-color:#5e9106;
     box-shadow: none;
 }
 .dropdown-menu.show {
@@ -278,7 +278,7 @@ a[href*="#followme"]::before {
 .hamburger.is-closed .hamb-top,
 .hamburger.is-closed .hamb-middle,
 .hamburger.is-closed .hamb-bottom {
-    background:linear-gradient(to right, #245502, #7dce13, #245502);
+    background:#5e9106;
 }
 .hamburger.is-closed .hamb-top { 
   top: 5px; 
@@ -304,7 +304,7 @@ a[href*="#followme"]::before {
 .hamburger.is-open .hamb-top,
 .hamburger.is-open .hamb-middle,
 .hamburger.is-open .hamb-bottom {
-    background:linear-gradient(to right, #245502, #7dce13, #245502);
+    background:#5e9106;
 }
 .hamburger.is-open .hamb-top,
 .hamburger.is-open .hamb-bottom {

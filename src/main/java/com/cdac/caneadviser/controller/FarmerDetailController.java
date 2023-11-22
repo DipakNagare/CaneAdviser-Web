@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -30,8 +33,18 @@ public class FarmerDetailController {
     }
 
     @GetMapping("/state-wise-counts")
-    public List<Object[]> getStateWiseCounts() {
-        return caneAdviserService.getStateWiseRegistrationCounts();
+    public List<Map<String, Object>> getStateWiseCounts() {
+        List<Object[]> stateWiseCounts = caneAdviserService.getStateWiseRegistrationCounts();
+        List<Map<String, Object>> formattedData = new ArrayList<>();
+
+        for (Object[] row : stateWiseCounts) {
+            Map<String, Object> stateCountMap = new HashMap<>();
+            stateCountMap.put("State", row[0]);
+            stateCountMap.put("Count", row[1]);
+            formattedData.add(stateCountMap);
+        }
+
+        return formattedData;
     }
 
     @GetMapping("/{farmId}")
@@ -139,14 +152,14 @@ public class FarmerDetailController {
     // return token;
     // }
 
-    @PostMapping("/demolog")
-    public String demologin() {
+    // @PostMapping("/demolog")
+    // public String demologin() {
 
-        String senderEmail = "dipaknagare3526@gmail.com";
-        String reciveEmail = "dipaknagare352699@gmail.com";
-        String mailPassword = "12345";
+    //     String senderEmail = "dipaknagare3526@gmail.com";
+    //     String reciveEmail = "dipaknagare352699@gmail.com";
+    //     String mailPassword = "12345";
 
-        return "";
-    }
+    //     return "";
+    // }
 
 }

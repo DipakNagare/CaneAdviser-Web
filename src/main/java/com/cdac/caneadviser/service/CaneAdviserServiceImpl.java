@@ -120,11 +120,12 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		userMasterRepo.deleteById(userId);
 	}
 
-	@Override
-	public UserMaster updateUser(UserMaster user) {
-		return userMasterRepo.save(user);
-	}
 
+	@Override
+    public UserMaster updateUser(UserMaster user) {
+        // Your implementation to update the user goes here
+        return userMasterRepo.save(user);
+    }
 	@Autowired
 	private QueryhandlerRepo queryhandlerRepo;
 

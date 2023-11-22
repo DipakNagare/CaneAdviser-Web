@@ -8,6 +8,51 @@
     <!-- Add Bootstrap CSS link here -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+    <style type="text/css">
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        svg {
+            background: #f7f7f7;
+        }
+
+        #india {
+            fill: #00BCD4;
+            opacity: .7;
+            stroke: #101010;
+            stroke: width 8px;;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 0.5em;
+            font-size: 10px;
+            color: #222;
+            background: #FFF;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0px 0px 2px 0px #a6a6a6;
+        }
+
+        .key path {
+            display: none;
+        }
+
+        .key line {
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .key text {
+            font-size: 10px;
+        }
+
+        .key rect {
+            stroke: width 8px;;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,7 +63,7 @@
         <nav class="navbar-expand-lg">
             <div class="container">
                 <div class="col-md-12 d-flex justify-content-end" style="height: 50px;">
-                    <a class="btn btn-outline-light px-2" style="margin-right: 10px;" href="Adminlogin">LOGIN</a>
+                    <a class="btn btn-outline-light px-2" style="margin-right: 10px;" href="/Adminlogin">LOGIN</a>
                 </div>
             </div>
         </nav>
@@ -78,6 +123,7 @@
         <script src="/js/map/states.json"></script>
 
 
+
         <script type="text/javascript">
             var w = 350;
             var h = 350;
@@ -85,111 +131,76 @@
             var path = d3.geo.path().projection(proj);
             var t = proj.translate(); // the projection's default translation
             var s = proj.scale() // the projection's default scale
-
+        
             var buckets = 9,
-                colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"]; // alternatively colorbrewer.YlGnBu[9]
-
+                colors = ["#C5E1A5", "#C5E1A5", "#C5E1A5", "#C5E1A5", "##C5E1A5", "##C5E1A5", "#C5E1A5", "#C5E1A5", "#C5E1A5"];
+        
             var map = d3.select("#chart").append("svg:svg")
                 .attr("width", w)
                 .attr("height", h)
-                //.call(d3.behavior.zoom().on("zoom", redraw))
                 .call(initialize);
-
+        
             var india = map.append("svg:g")
                 .attr("id", "india");
-
+        
             var div = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
-
-
-            d3.json("/js/map/states.json", function (json) {
-
-                var maxTotal = d3.max(json.features, function (d) { return d.total });
-
-                var colorScale = d3.scale.quantile()
-                    .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxTotal }))
-                    .range(colors);
-
-                // ubhi dandi map chi
-                // var y = d3.scale.sqrt()
-                //     .domain([0, 10000])
-                //     .range([0, 300]);
-
-                // var yAxis = d3.svg.axis()
-                //     .scale(y)
-                //     .tickValues(colorScale.domain())
-                //     .orient("right");
-
-
-                india.selectAll("path")
-                    .data(json.features)
-                    .enter().append("path")
-                    .attr("d", path)
-                    .style("fill", colors[0])
-                    .style("opacity", 0.5)
-                    .style("stroke", "dark") // Add this line to set the stroke color
-
-
-                    .on('click', function (d, i) {
-                        d3.select(this).transition().duration(300).style("opacity", 1);
-                        div.transition().duration(300)
-                            .style("opacity", 1)
-                        div.text(d.id + " : " + d.total)
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY - 30) + "px");
-                    })
-
-                    .on('mouseleave', function (d, i) {
-                        d3.select(this).transition().duration(300)
-                            .style("opacity", 0.5);
-                        div.transition().duration(300)
-                            .style("opacity", 0);
-                    })
-                    .on('mouseenter', function (d, i) {
-                        d3.select(this).transition().duration(300)
-                            .style("opacity", 0.5);
-                        div.transition().duration(300)
-                            .style("opacity", 0);
-
+        
+            // Fetch counts from the backend
+            fetch('http://localhost:8081/farmer-details/state-wise-counts')
+                .then(response => response.json())
+                .then(data => {
+                    var countMap = new Map();
+        
+                    data.forEach(entry => {
+                        countMap.set(entry.State, entry.Count);
                     });
-
-                india.selectAll("path").transition().duration(1000)
-                    .style("fill", function (d) { return colorScale(d.total); });
-
-
-
-                //Adding legend for our Choropleth
-
-
-                var g = india.append("g")
-                    .attr("class", "key")
-                    .attr("transform", "translate(445, 305)")
-                    .call(yAxis);
-
-                g.selectAll("rect")
-                    .data(colorScale.range().map(function (d, i) {
-                        return {
-                            y0: i ? y(colorScale.domain()[i - 1]) : y.range()[0],
-                            y1: i < colorScale.domain().length ? y(colorScale.domain()[i]) : y.range()[1],
-                            z: d
-                        };
-                    }))
-                    .enter().append("rect")
-                    .attr("width", 10)
-                    .attr("y", function (d) { return d.y0; })
-                    .attr("height", function (d) { return d.y1 - d.y0; })
-                    .style("fill", function (d) { return d.z; });
-
-
-            });
-
+        
+                    d3.json("/js/map/states.json", function (json) {
+                        var maxCount = d3.max(json.features, function (d) { return countMap.get(d.id) || 0; });
+        
+                        var colorScale = d3.scale.quantile()
+                            .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxCount; }))
+                            .range(colors);
+        
+                        india.selectAll("path")
+                            .data(json.features)
+                            .enter().append("path")
+                            .attr("d", path)
+                            .style("fill", colors[buckets])
+                            .style("opacity", 0.5)
+                            .on('click', function (d, i) {
+                                d3.select(this).transition().duration(300).style("opacity", 1);
+                                div.transition().duration(300)
+                                    .style("opacity", 1)
+                                div.text(d.id + " : " + (countMap.get(d.id) || 0))
+                                    .style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 30) + "px");
+                            })
+                            .on('mouseleave', function (d, i) {
+                                d3.select(this).transition().duration(300)
+                                    .style("opacity", 0.5);
+                                div.transition().duration(300)
+                                    .style("opacity", 0);
+                            })
+                            .on('mouseenter', function (d, i) {
+                                d3.select(this).transition().duration(300)
+                                    .style("opacity", 0.5);
+                                div.transition().duration(300)
+                                    .style("opacity", 0);
+                            });
+        
+                        india.selectAll("path").transition().duration(1000)
+                            .style("fill", function (d) { return colorScale(countMap.get(d.id) || 0); });
+                    });
+                })
+                .catch(error => console.error('Error fetching counts:', error));
+        
             function initialize() {
                 proj.scale(4000);
                 proj.translate([-740, 420]);
             }
-
-
         </script>
     </section>
 </body>

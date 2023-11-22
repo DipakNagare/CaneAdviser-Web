@@ -30,6 +30,12 @@ public class HomeController {
         return "manageTechnology";
     }
 
+    @GetMapping("/viewExpert")
+    public String viewExpert()
+    {
+        return "viewExpert";
+    }
+
     @GetMapping("/manageExpert")
     public String manageExpert()
     {
@@ -40,6 +46,12 @@ public class HomeController {
     public String viewQueries()
     {
         return "viewQueries";
+    }
+
+     @GetMapping("/assignQueries")
+    public String assignQueries()
+    {
+        return "assignQueries";
     }
     
 }
