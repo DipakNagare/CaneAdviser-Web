@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -60,9 +61,14 @@ public class Queryhandler implements Serializable {
 	private String queryDesc;
 
 	//bi-directional many-to-one association to QueryAssignedMaster
+	// @JsonIgnore
+	// @OneToMany(mappedBy="queryhandler")
+	// private List<QueryAssignedMaster> queryAssignedMasters;
+
+	// Beacuse of this query deleted form queryhandler table and also attached table pquery_assign_master.
 	@JsonIgnore
-	@OneToMany(mappedBy="queryhandler")
-	private List<QueryAssignedMaster> queryAssignedMasters;
+    @OneToMany(mappedBy = "queryhandler", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QueryAssignedMaster> queryAssignedMasters;
 
 	//bi-directional many-to-one association to FarmerDetail
 	@JsonIgnore

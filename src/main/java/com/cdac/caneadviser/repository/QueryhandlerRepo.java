@@ -1,12 +1,14 @@
 package com.cdac.caneadviser.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.cdac.caneadviser.entity.GroupMaster;
 import com.cdac.caneadviser.entity.Queryhandler;
 
 @Repository
@@ -41,6 +43,7 @@ public interface QueryhandlerRepo extends JpaRepository<Queryhandler, Integer> {
 
     @Query("SELECT q FROM Queryhandler q WHERE q.farmerDetail.farmId = :farmId")
     List<Queryhandler> findQueriesByFarmId(@Param("farmId") int farmId);
+
 
     // int maxNumber();
 }

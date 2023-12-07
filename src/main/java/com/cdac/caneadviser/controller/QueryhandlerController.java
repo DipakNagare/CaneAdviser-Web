@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cdac.caneadviser.entity.Queryhandler;
@@ -20,6 +22,31 @@ public class QueryhandlerController {
 
     @Autowired
     private CaneAdviserService caneAdviserService;
+
+    @PostMapping("/submit-answer")
+    public ResponseEntity<String> submitAnswer(@RequestParam(name = "queId") int queId,
+            @RequestParam(name = "answer") String answer) {
+        try {
+            if (answer != null) {
+                caneAdviserService.updateQueryAnswer(queId, answer);
+                return new ResponseEntity<>("Answer Submitted Successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Answer not provided", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error Submitting Answer: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/delete-query/{queId}")
+    public ResponseEntity<String> deleteQuery(@PathVariable int queId) {
+        try {
+            caneAdviserService.deleteQuery(queId);
+            return new ResponseEntity<>("Query deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting query: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/queryHandler")
     public String queryHandler(@RequestBody Queryhandler queryHandler) throws IOException {

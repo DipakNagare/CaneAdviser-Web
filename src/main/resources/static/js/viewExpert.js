@@ -19,9 +19,10 @@ $(document).ready(function () {
                 const email = $('#userId').val();
                 const contactNo = $('#contactNo').val();
                 const gender = $('#gender').val();
+                const status = $('#status')
 
                 // Validate the form data
-                if (!name || !email || !contactNo || !gender) {
+                if (!name || !email || !contactNo || !gender || !status) {
                     Swal.showValidationMessage('Please fill in all fields');
                     return;
                 }
@@ -36,6 +37,7 @@ $(document).ready(function () {
                         contactNo: $("#contactNo").val(),
                         email: $("#userId").val(),
                         gender: $("#gender").val(),
+                        status: $("#status").val()
 
                     }),
                     success: function (data) {
@@ -95,6 +97,19 @@ $(document).ready(function () {
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+    <div class="form-group">
+    <label style="font-size: 18px;">Status</label>
+    <select id="status" name="status" class="form-control" required
+        style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
+        <option disabled selected value>Select</option>
+        <option value="Active">Active</option>
+        <option value="Unactive">Unactive</option>
+    </select>
+</div>
+    </div>
+    </div>
 </form>
 </div>
     `;
@@ -210,8 +225,8 @@ function showEditExpertModal(userId) {
 
 ////////////////////////////////////////////////////////////////////////////
 
-   // Function to open the SweetAlert modal for editing an expert
-   window.showEditExpertModal = function (userId) {
+// Function to open the SweetAlert modal for editing an expert
+window.showEditExpertModal = function (userId) {
     // Fetch the expert data by userId
     $.get(`/user-masters/${userId}`, function (expert) {
         // Check if the expert data is valid
@@ -288,32 +303,21 @@ function getEditExpertForm(expert) {
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label style="font-size: 18px;">Gender</label>
-                <select id="editGender" name="editGender" class="form-control" required
-                    style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-                    <option value="Male" ${expert.gender === 'Male' ? 'selected' : ''}>Male</option>
-                    <option value="Female" ${expert.gender === 'Female' ? 'selected' : ''}>Female</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
                 <label for="editContactNo" style="display: block; font-size: 18px; color: #000;">Contact No</label>
                 <input type="text" name="editContactNo" id="editContactNo" value="${expert.contactNo || ''}" class="form-control"
                     required pattern="[0-9]{10}"
                     style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
             </div>
         </div>
-    </div>
-    <div class="row">
+
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="editEmail" style="display: block; font-size: 18px; color: #000;">Email</label>
-                <input type="email" name="editEmail" id="editEmail" value="${expert.email || ''}" class="form-control"
-                    required
-                    style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
-            </div>
+        <div class="form-group">
+            <label for="editEmail" style="display: block; font-size: 18px; color: #000;">Email</label>
+            <input type="email" name="editEmail" id="editEmail" value="${expert.email || ''}" class="form-control"
+                required
+                style="height: 50px; background: #ecf0f4; border-color: transparent; padding: 0 15px; font-size: 16px; transition: all 0.3s ease-in-out;">
         </div>
+    </div>
     </div>
 </form>
 </div>

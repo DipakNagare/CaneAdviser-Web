@@ -30,9 +30,10 @@
                                 <a href="adminDashboard">Admin</a>
                             </div>
                         </div>
-                        <li><a href="manageTechnology" id="manageTechnology" data-url="/manageTechnology">Manage Technology</a></li>
+                        <li><a href="manageTechnology" id="manageTechnology" data-url="/manageTechnology">Manage
+                                Technology</a></li>
                         <!-- <li><a href="manageExpert" id="manageExpert" data-url="/manageExpert">Manage Expert</a></li> -->
-                        <li><a href="viewExpert" id="viewExpert" data-url="/viewExpert">View Expert</a></li> 
+                        <li><a href="viewExpert" id="viewExpert" data-url="/viewExpert">View Expert</a></li>
                         <li><a href="viewQueries" id="viewQueries" data-url="/viewQueries">View Queries</a></li>
                     </ul>
                 </div>
@@ -51,18 +52,18 @@
                             <h2 class="text-center" style="background-color: #65aca4; padding: 10px; color: #FFF">India Map</h2>
                             <div id="chart"></div>
                         </div>
-        
-                       
-                        <div class="pieChartAdmin col-lg-4 mb-4">
+
+
+                        <div class="pieChartAdmin col-md-6 col-lg-4 mb-4">
                             <h2 class="text-center" style="background-color: #65aca4; padding: 10px; color: #FFF">Pie Chart</h2>
                             <div class="chart-container">
                                 <!-- Pie chart will be displayed here -->
                                 <canvas id="pieChart" width="100" height="100"></canvas>
                             </div>
                         </div>
-        
-        
-                        <div class=" barChartAdmin col-lg-4 mb-4">
+
+
+                        <div class=" barChartAdmin col-md-6 col-lg-4 mb-4">
                             <h2 class="text-center" style="background-color: #65aca4; padding: 10px; color: #FFF">Bar Chart</h2>
                             <div class="chart-container">
                                 <!-- Bar chart will be displayed here -->
@@ -82,9 +83,9 @@
                 <!-- /#page-content-wrapper -->
                 <!-- /#wrapper -->
                 <!-- Add your JavaScript libraries here -->
-                <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-                    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
                 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <!-- Add your custom JavaScript file here -->
@@ -95,120 +96,98 @@
                 <script src="/js/map/topojson.v1.min.js"></script>
                 <script src="/js/map/d3.geo.min.js"></script>
                 <script src="/js/map/states.json"></script>
-        
-        
+
+
                 <script type="text/javascript">
                     var w = 350;
-                    var h = 350  ;
+                    var h = 350;
                     var proj = d3.geo.mercator();
                     var path = d3.geo.path().projection(proj);
                     var t = proj.translate(); // the projection's default translation
                     var s = proj.scale() // the projection's default scale
-        
-                    var buckets = 9,
-                        colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"]; // alternatively colorbrewer.YlGnBu[9]
-        
+
+                    var buckets = 18
+                    var colors = ["whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke", "whitesmoke"];
+
                     var map = d3.select("#chart").append("svg:svg")
                         .attr("width", w)
                         .attr("height", h)
-                        //.call(d3.behavior.zoom().on("zoom", redraw))
                         .call(initialize);
-        
+
                     var india = map.append("svg:g")
                         .attr("id", "india");
-        
+
                     var div = d3.select("body").append("div")
                         .attr("class", "tooltip")
-                        .style("opacity", 0);
-        
-        
-                    d3.json("/js/map/states.json", function (json) {
-        
-                        var maxTotal = d3.max(json.features, function (d) { return d.total });
-        
-                        var colorScale = d3.scale.quantile()
-                            .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxTotal }))
-                            .range(colors);
-        
-        // ubhi dandi map chi
-                        // var y = d3.scale.sqrt()
-                        //     .domain([0, 10000])
-                        //     .range([0, 300]);
-        
-                        // var yAxis = d3.svg.axis()
-                        //     .scale(y)
-                        //     .tickValues(colorScale.domain())
-                        //     .orient("right");
-        
-        
-                        india.selectAll("path")
-                            .data(json.features)
-                            .enter().append("path")
-                            .attr("d", path)
-                            .style("fill", colors[0])
-                            .style("opacity", 0.5)
-                            .style("stroke", "dark") // Add this line to set the stroke color
-        
-        
-                            .on('click', function (d, i) {
-                                d3.select(this).transition().duration(300).style("opacity", 1);
-                                div.transition().duration(300)
-                                    .style("opacity", 1)
-                                div.text(d.id + " : " + d.total)
-                                    .style("left", (d3.event.pageX) + "px")
-                                    .style("top", (d3.event.pageY - 30) + "px");
-                            })
-        
-                            .on('mouseleave', function (d, i) {
-                                d3.select(this).transition().duration(300)
-                                    .style("opacity", 0.5);
-                                div.transition().duration(300)
-                                    .style("opacity", 0);
-                            })
-                            .on('mouseenter', function (d, i) {
-                                d3.select(this).transition().duration(300)
-                                    .style("opacity", 0.5);
-                                div.transition().duration(300)
-                                    .style("opacity", 0);
-        
+                        .style("opaciy", 1);
+
+                    // Fetch counts from the backend
+                    fetch('http://localhost:8081/farmer-details/state-wise-counts')
+                        .then(response => response.json())
+                        .then(data => {
+                            var countMap = new Map();
+
+                            data.forEach(entry => {
+                                countMap.set(entry.State, entry.Count);
                             });
-        
-                        india.selectAll("path").transition().duration(1000)
-                            .style("fill", function (d) { return colorScale(d.total); });
-        
-        
-        
-                        //Adding legend for our Choropleth
-        
-        
-                        var g = india.append("g")
-                            .attr("class", "key")
-                            .attr("transform", "translate(445, 305)")
-                            .call(yAxis);
-        
-                        g.selectAll("rect")
-                            .data(colorScale.range().map(function (d, i) {
-                                return {
-                                    y0: i ? y(colorScale.domain()[i - 1]) : y.range()[0],
-                                    y1: i < colorScale.domain().length ? y(colorScale.domain()[i]) : y.range()[1],
-                                    z: d
-                                };
-                            }))
-                            .enter().append("rect")
-                            .attr("width", 10)
-                            .attr("y", function (d) { return d.y0; })
-                            .attr("height", function (d) { return d.y1 - d.y0; })
-                            .style("fill", function (d) { return d.z; });
-        
-        
-                    });
-        
+
+                            d3.json("/js/map/states.json", function (json) {
+                                var maxCount = d3.max(json.features, function (d) { return countMap.get(d.id) || 0; });
+
+                                var colorScale = d3.scale.quantile()
+                                    .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxCount; }))
+                                    .range(colors);
+
+                                india.selectAll("path")
+                                    .data(json.features)
+                                    .enter().append("path")
+                                    .attr("d", path)
+                                    .style("fill", function (d) { return colors[buckets]; })  // Use whitesmoke as the fill color
+                                    .style("opacity", 0.5)
+                                    .style("stroke", "#101010")  // Set border color
+                                    .style("stroke-width", 1)   // Set initial border width
+
+                                    .on('click', function (d, i) {
+                                        d3.select(this).transition().duration(300).style("opacity", 1);
+                                        div.transition().duration(300)
+                                            .style("opacity", 1)
+                                            .style("background-color", "#ADFF2F"); // Set background color to red
+                                        div.text(d.id + " : " + (countMap.get(d.id) || 0))
+                                            .style("left", (d3.event.pageX) + "px")
+                                            .style("top", (d3.event.pageY - 30) + "px");
+
+                                        d3.select(this).style("stroke-width", 1);
+
+                                    })
+                                    .on('mouseleave', function (d, i) {
+                                        d3.select(this).transition().duration(300)
+                                            .style("opacity", 0.5)
+                                            .style("stroke-width", 1); // Reset border width
+
+                                        div.transition().duration(300)
+                                            .style("opacity", 0)
+                                            .style("background-color", null); // Reset background color
+
+                                    })
+                                    .on('mouseenter', function (d, i) {
+                                        d3.select(this).transition().duration(300)
+                                            .style("opacity", 0.5)
+                                            .style("stroke-width", 1); // Reset border width
+
+                                        div.transition().duration(300)
+                                            .style("opacity", 0);
+                                    });
+
+                                india.selectAll("path").transition().duration(1000)
+                                    .style("fill", function (d) { return colorScale(countMap.get(d.id) || 0); });
+                            });
+                        })
+                        .catch(error => console.error('Error fetching counts:', error));
+
                     function initialize() {
                         proj.scale(4000);
                         proj.translate([-740, 420]);
                     }
-        
-        
                 </script>
             </div>
         </div>

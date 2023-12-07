@@ -27,6 +27,7 @@ import com.cdac.caneadviser.entity.Analytic;
 import com.cdac.caneadviser.entity.FarmerDetail;
 import com.cdac.caneadviser.entity.GroupMaster;
 import com.cdac.caneadviser.entity.MobileUserHit;
+import com.cdac.caneadviser.entity.QueryAssignedMaster;
 import com.cdac.caneadviser.entity.Queryhandler;
 import com.cdac.caneadviser.entity.RoleMaster;
 import com.cdac.caneadviser.entity.UserMaster;
@@ -102,10 +103,10 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		return userMasterRepo.findAll();
 	}
 
-	@Override
-	public Optional<UserMaster> getUserMasterById(String userId) {
-		return userMasterRepo.findById(userId);
-	}
+	// @Override
+	// public Optional<UserMaster> getUserMasterById(String userId) {
+	// return userMasterRepo.findById(userId);
+	// }
 
 	@Override
 	public UserMaster saveUser(UserMaster user) {
@@ -120,14 +121,50 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 		userMasterRepo.deleteById(userId);
 	}
 
-
 	@Override
-    public UserMaster updateUser(UserMaster user) {
-        // Your implementation to update the user goes here
-        return userMasterRepo.save(user);
-    }
+	public UserMaster updateUser(UserMaster user) {
+
+		return userMasterRepo.save(user);
+	}
+
 	@Autowired
 	private QueryhandlerRepo queryhandlerRepo;
+
+	// use to save assig query as per expert
+	@Override
+	public Optional<UserMaster> getUserMasterById(String userId) {
+		return userMasterRepo.findById(userId);
+	}
+
+	@Override
+	public Optional<Queryhandler> getQueryhandlerById(int questionId) {
+		return queryhandlerRepo.findById(questionId);
+	}
+
+	@Override
+	public void saveQueryAssignedMaster(QueryAssignedMaster queryAssignedMaster) {
+		queryAssignedMasterRepo.save(queryAssignedMaster);
+	}
+
+	 @Override
+    public void updateQueryAnswer(int queId, String answer) {
+        // Implement the logic to update the query answer in the Queryhandler entity
+        Optional<Queryhandler> optionalQueryhandler = queryhandlerRepo.findById(queId);
+        optionalQueryhandler.ifPresent(queryhandler -> {
+            queryhandler.setQueryAnswer(answer);
+            queryhandlerRepo.save(queryhandler);
+        });
+    }
+
+	@Override
+    public void deleteQuery(int queId) {
+        // Implement the logic to delete the query
+        Optional<Queryhandler> optionalQueryhandler = queryhandlerRepo.findById(queId);
+        optionalQueryhandler.ifPresent(queryhandlerRepo::delete);
+    }
+
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public List<Object[]> getMonthlyCountsForCurrentYear() {
@@ -332,11 +369,11 @@ public class CaneAdviserServiceImpl implements CaneAdviserService {
 
 				FarmerDetail farmerDetail = new FarmerDetail();
 				farmerDetail.setFarmerName(registration.getFarmerName());
-				farmerDetail.setCountry(registration.getCountry());
 				farmerDetail.setState(registration.getState());
 				farmerDetail.setDistrict(registration.getDistrict());
 				farmerDetail.setMobileNo(registration.getMobileNo());
 				farmerDetail.setEmailId(registration.getEmailId());
+				farmerDetail.setCountry(registration.getCountry());
 
 				farmerDetail.setStatus("Success");
 				farmerDetailRepo.save(farmerDetail);

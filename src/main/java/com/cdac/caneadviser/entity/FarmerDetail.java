@@ -35,8 +35,9 @@ public class FarmerDetail implements Serializable {
 	@Lob
 	private String address;
 
-	private String age;
+	private Integer age;
 
+	@Column (name = "COUNTRY")
 	private String country;
 
 	@Column(name="CREATED_ON")
@@ -109,11 +110,11 @@ public class FarmerDetail implements Serializable {
 		this.address = address;
 	}
 
-	public String getAge() {
+	public Integer getAge() {
 		return this.age;
 	}
 
-	public void setAge(String age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
@@ -272,5 +273,6 @@ public class FarmerDetail implements Serializable {
 
 		return queryhandler;
 	}
+
 
 }

@@ -50,13 +50,14 @@ public class UserMaster implements Serializable {
 	@Column(name="END_DATE")
 	private Date endDate;
 
+	@Column(name = "GENDER")
 	private String gender;
 
 	private String name;
 
 	private String password;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE) 
 	@Column(name="START_DATE")
 	private Date startDate;
 

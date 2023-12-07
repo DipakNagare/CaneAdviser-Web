@@ -1,27 +1,26 @@
 package com.cdac.caneadviser.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class User { 
+public class User {
     @Id
-    @GeneratedValue
-    private Long id;
-    private String email;
+    private String userId;
     private String password;
-    public Long getId() {
-        return id;
+    private int roleId;
+
+    
+    public User(String userId, String password, int roleId) {
+        this.userId = userId;
+        this.password = password;
+        this.roleId = roleId;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public String getUserId() {
+        return userId;
     }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
     public String getPassword() {
         return password;
@@ -29,7 +28,12 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+    public int getRoleId() {
+        return roleId;
+    }
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }  
 
+    
 }

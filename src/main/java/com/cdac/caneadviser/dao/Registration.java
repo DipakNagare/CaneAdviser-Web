@@ -38,7 +38,7 @@ public class Registration {
     @NotNull(message = "Age is required")
     @Min(value = 18, message = "Age must be at least 18")
     @Max(value = 100, message = "Age cannot be more than 100")
-    private int age;
+    private Integer age;
 
     @NotNull(message = "Village is required")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Invalid Format. Only Alphabets are allowed")
@@ -140,11 +140,11 @@ public class Registration {
 		this.occupation = occupation;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
